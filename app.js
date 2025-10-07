@@ -338,6 +338,245 @@ const regulationsData = {
             "Monitor SEBI updates"
           ],
           penalties: "SEBI enforcement, trading suspensions"
+       },
+        {
+          id: "rbi-climate",
+          name: "RBI Climate Risk and Sustainable Finance Guidelines",
+          acronym: "RBI-CLIMATE",
+          authority: "Reserve Bank of India",
+          status: "Mandatory",
+          topics: ["Climate", "Governance"],
+          applicability: [
+            "Scheduled commercial banks (excluding regional rural banks)",
+            "Primary urban cooperative banks",
+            "Systemically important NBFCs regulated by RBI"
+          ],
+          timeline: "Board-approved implementation plans by October 2022; integrate climate risk management from FY 2023-24",
+          officialLink: "https://rbidocs.rbi.org.in/rdocs/PublicationReport/Pdfs/DP27072022CRSF.PDF",
+          dataRequired: [
+            "Climate risk governance structures",
+            "Assessment of physical and transition risks",
+            "Scenario analysis outcomes",
+            "Portfolio exposure metrics",
+            "Climate-related financial disclosures"
+          ],
+          complianceSteps: [
+            "Assign board accountability for climate risk oversight",
+            "Develop institution-wide climate risk strategy",
+            "Integrate climate factors into credit, market and liquidity risk policies",
+            "Enhance data and MIS for climate risk measurement",
+            "Conduct scenario analysis and stress testing",
+            "Embed climate considerations in ICAAP and risk appetite",
+            "Update product governance and disclosures",
+            "Train staff and build specialist capabilities",
+            "Engage clients on transition planning",
+            "Report progress to RBI supervisors"
+          ],
+          penalties: "Subject to RBI supervisory directions, corrective action plans and monetary penalties"
+        },
+        {
+          id: "nz-crd",
+          name: "Climate-related Disclosures Regime",
+          acronym: "NZ-CRD",
+          authority: "External Reporting Board & Financial Markets Authority",
+          status: "Mandatory",
+          topics: ["Climate", "Governance"],
+          applicability: [
+            "Listed issuers with market cap over NZ$60 million",
+            "Registered banks, credit unions and building societies > NZ$1 billion total assets",
+            "Licensed insurers and investment scheme managers over prescribed thresholds"
+          ],
+          timeline: "Applies to accounting periods on or after 1 January 2023 with first climate statements due in 2024",
+          officialLink: "https://www.xrb.govt.nz/standards/climate-related-disclosures/",
+          dataRequired: [
+            "Governance of climate-related risks and opportunities",
+            "Strategy resilience across climate scenarios",
+            "Risk management processes for climate impacts",
+            "Metrics and targets including Scope 1-3 emissions",
+            "Assurance statement for greenhouse gas inventories"
+          ],
+          complianceSteps: [
+            "Determine climate reporting entity status and group boundaries",
+            "Assign board and management responsibilities",
+            "Map climate risks and opportunities across operations",
+            "Undertake scenario analysis aligned to XRB guidance",
+            "Establish GHG accounting systems for Scopes 1-3",
+            "Integrate climate risk into enterprise risk management",
+            "Set metrics and science-aligned targets",
+            "Prepare climate statements using NZ CS standards",
+            "Obtain external assurance over emissions data",
+            "Submit disclosures to the Companies Office and publish"
+          ],
+          penalties: "FMA enforcement including civil pecuniary penalties and corrective orders"
+        },
+        {
+          id: "au-climate",
+          name: "Australian Climate-related Financial Disclosure Regime",
+          acronym: "AU-CLIMATE",
+          authority: "Australian Treasury & Australian Securities and Investments Commission",
+          status: "Mandatory (phased)",
+          topics: ["Climate", "Governance"],
+          applicability: [
+            "Group 1 entities: consolidated revenue ≥ A$1 billion or >500 employees",
+            "Group 2 entities: revenue ≥ A$500 million or >250 employees",
+            "Group 3 entities: revenue ≥ A$50 million or >100 employees"
+          ],
+          timeline: "Reporting begins FY2024-25 for Group 1, FY2026-27 for Group 2, FY2027-28 for Group 3",
+          officialLink: "https://treasury.gov.au/consultation/c2023-442647",
+          dataRequired: [
+            "Governance and oversight of climate risks",
+            "Strategy impacts and transition planning",
+            "Risk management integration with climate scenarios",
+            "Metrics and targets including Scope 1-3 emissions",
+            "Transition plans and financed emissions where material"
+          ],
+          complianceSteps: [
+            "Identify reporting group and phase-in timetable",
+            "Establish board-level oversight of climate disclosure",
+            "Develop climate risk and opportunity register",
+            "Conduct scenario analysis aligned to ISSB guidance",
+            "Strengthen emissions data collection and controls",
+            "Set transition plans and decarbonisation targets",
+            "Align reporting to Australian Sustainability Reporting Standards",
+            "Coordinate financial and sustainability reporting teams",
+            "Engage assurance provider for limited assurance",
+            "File climate disclosures with annual reports and ASIC"
+          ],
+          penalties: "Corporations Act civil penalties and ASIC enforcement for misleading or non-compliant disclosure"
+        },
+        {
+          id: "tse-esg",
+          name: "Tokyo Stock Exchange ESG Disclosure Requirements",
+          acronym: "TSE-ESG",
+          authority: "Tokyo Stock Exchange",
+          status: "Mandatory (comply or explain)",
+          topics: ["Environment", "Social", "Governance"],
+          applicability: [
+            "Prime Market listed companies",
+            "Standard Market companies referencing Corporate Governance Code"
+          ],
+          timeline: "Enhanced sustainability disclosure effective from April 2022 Corporate Governance Code revisions",
+          officialLink: "https://www.jpx.co.jp/english/equities/listing/co-listing/management/esg/index.html",
+          dataRequired: [
+            "Sustainability governance and policies",
+            "Material ESG risks and opportunities",
+            "TCFD-aligned climate disclosure for Prime Market",
+            "Human capital and diversity metrics",
+            "Supply chain due diligence approach"
+          ],
+          complianceSteps: [
+            "Review Corporate Governance Code sustainability principles",
+            "Designate board oversight for sustainability matters",
+            "Identify material ESG topics and key metrics",
+            "Align climate reporting with TCFD recommendations",
+            "Publish sustainability policy and objectives",
+            "Integrate ESG factors into mid-term management plans",
+            "Enhance data collection on human capital and supply chain",
+            "Engage investors through ESG disclosures",
+            "Report progress within corporate governance reports",
+            "Address feedback from TSE and stakeholders"
+          ],
+          penalties: "Potential TSE supervision, disclosure requests and listing review"
+        },
+        {
+          id: "hkex-esg",
+          name: "HKEX ESG Reporting Guide",
+          acronym: "HKEX-ESG",
+          authority: "Hong Kong Exchanges and Clearing Limited",
+          status: "Mandatory (comply or explain)",
+          topics: ["Environment", "Social", "Governance"],
+          applicability: ["All companies listed on HKEX Main Board and GEM"],
+          timeline: "Upgraded ESG Reporting Guide effective July 1, 2020 with climate disclosure enhancements from 2022",
+          officialLink: "https://www.hkex.com.hk/Listing/Sustainability/Environmental-Social-and-Governance-Reporting?sc_lang=en",
+          dataRequired: [
+            "Board statement on ESG governance",
+            "Materiality assessment methodology",
+            "Environmental KPIs including GHG emissions and targets",
+            "Social KPIs covering workforce, supply chain and community",
+            "Climate-related disclosure aligned with TCFD"
+          ],
+          complianceSteps: [
+            "Assign board responsibility for ESG strategy",
+            "Conduct stakeholder engagement and materiality assessment",
+            "Collect environmental and social performance data",
+            "Set quantitative targets for key ESG indicators",
+            "Align climate disclosures with TCFD framework",
+            "Enhance internal controls for ESG data quality",
+            "Prepare annual ESG report within five months of year end",
+            "Publish ESG report on HKEX and company websites",
+            "Consider independent assurance for key metrics",
+            "Respond to HKEX regulatory feedback and queries"
+          ],
+          penalties: "HKEX disciplinary actions, public censure and potential trading suspensions"
+        },
+        {
+          id: "sgx-sr",
+          name: "SGX Sustainability Reporting Requirements",
+          acronym: "SGX-SR",
+          authority: "Singapore Exchange Regulation",
+          status: "Mandatory",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "All issuers listed on SGX-ST",
+            "REITs and business trusts with material operations in Singapore"
+          ],
+          timeline: "Sustainability reporting required since FY2017; climate reporting mandatory from FY2023 for priority sectors",
+          officialLink: "https://www.sgx.com/regulation/sustainability-reporting",
+          dataRequired: [
+            "Material ESG factors and management approach",
+            "Policies, practices and performance metrics",
+            "Targets and progress including GHG emissions",
+            "Board statement on sustainability governance",
+            "Climate reporting aligned with ISSB/TCFD guidance"
+          ],
+          complianceSteps: [
+            "Confirm SGX reporting timelines and sector requirements",
+            "Appoint board and management oversight for sustainability",
+            "Conduct materiality assessment covering ESG topics",
+            "Establish data collection and internal controls",
+            "Develop metrics and targets for material factors",
+            "Align climate disclosures with ISSB and TCFD guidance",
+            "Prepare sustainability report referencing SGX Practice Note 7.6",
+            "Obtain external assurance where required by investors",
+            "Lodge report within four months of financial year end",
+            "Engage stakeholders and respond to SGX feedback"
+          ],
+          penalties: "SGX regulatory actions including public reprimand and potential suspension"
+        },
+        {
+          id: "k-esg",
+          name: "Korea ESG Disclosure Standards",
+          acronym: "K-ESG",
+          authority: "Financial Services Commission & Korea Exchange",
+          status: "Mandatory (phased)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "KOSPI-listed companies with assets ≥ KRW 2 trillion (from 2025)",
+            "KOSPI/KOSDAQ companies with assets ≥ KRW 1 trillion (from 2026)",
+            "All listed companies by 2030"
+          ],
+          timeline: "Phased mandatory ESG disclosure starting 2025 and extending to all listed companies by 2030",
+          officialLink: "https://www.fsc.go.kr/eng/pr010101/77231",
+          dataRequired: [
+            "Governance of sustainability and board oversight",
+            "Environment metrics including emissions, energy and resource use",
+            "Social indicators such as workforce diversity and safety",
+            "Climate risk management and transition plans",
+            "Supply chain due diligence and ethics policies"
+          ],
+          complianceSteps: [
+            "Confirm phase-in schedule based on asset size",
+            "Establish ESG governance and reporting responsibilities",
+            "Identify material ESG topics and KPIs",
+            "Develop data systems for environmental and social metrics",
+            "Conduct climate risk assessments and scenario analysis",
+            "Integrate ESG factors into corporate strategy and IR",
+            "Align disclosure structure with K-ESG standards",
+            "Coordinate with auditors for assurance readiness",
+            "Publish annual ESG report via DART and company channels",
+            "Engage with FSC and investors on feedback"
+          ],
+          penalties: "FSC enforcement including corrective orders, fines and potential delisting procedures"        
         }
       ]
     },
