@@ -147,7 +147,108 @@
                     <h2>🎯 Organization Type Matcher</h2>
                     <p>Find which regulations apply to your organization based on size, type, and operations</p>
                 </div>
-
+        },
+        {
+          id: "uk-secr",
+          name: "Streamlined Energy and Carbon Reporting",
+          acronym: "UK SECR",
+          authority: "Department for Energy Security and Net Zero",
+          status: "Mandatory",
+          topics: ["Climate", "Environment"],
+          applicability: [
+            "UK quoted companies",
+            "Large unquoted companies meeting ≥2 of: £36m turnover, £18m balance sheet, 250 employees",
+            "Large LLPs incorporated in the UK"
+          ],
+          timeline: "Effective for financial years starting on or after 1 April 2019; annual reporting in directors' report",
+          officialLink: "https://www.gov.uk/guidance/streamlined-energy-and-carbon-reporting",
+          dataRequired: [
+            "Total UK energy consumption (electricity, gas, transport fuel)",
+            "Scope 1 and Scope 2 greenhouse gas emissions",
+            "Intensity ratio metrics relevant to operations",
+            "Energy efficiency actions undertaken during the year"
+          ],
+          complianceSteps: [
+            "Confirm SECR qualification based on company size and listing status",
+            "Define organisational and operational boundaries for energy data",
+            "Collect 12 months of electricity, gas, and transport fuel consumption",
+            "Calculate Scope 1 and Scope 2 greenhouse gas emissions",
+            "Select and justify appropriate intensity ratios",
+            "Document energy efficiency opportunities and actions",
+            "Integrate disclosures into the directors' report or energy and carbon report",
+            "Obtain internal sign-off and board approval",
+            "Retain supporting evidence for potential audit review",
+            "Monitor policy updates from DESNZ and Companies House"
+          ],
+          penalties: "Late or missing filings subject to Companies Act civil penalties and potential criminal sanctions"
+        },
+        {
+          id: "uk-esos",
+          name: "Energy Savings Opportunity Scheme",
+          acronym: "UK ESOS",
+          authority: "Environment Agency",
+          status: "Mandatory",
+          topics: ["Climate", "Environment"],
+          applicability: [
+            "UK organisations with ≥250 employees",
+            "Undertakings with >£44m turnover and >£38m balance sheet",
+            "Corporate groups with an overseas parent meeting UK thresholds"
+          ],
+          timeline: "Phase 3 compliance deadline: 5 December 2023; Phase 4 audit and reporting deadline: 5 December 2027",
+          officialLink: "https://www.gov.uk/guidance/energy-savings-opportunity-scheme-esos",
+          dataRequired: [
+            "Total 12-month energy consumption across buildings, industrial processes, and transport",
+            "Significant energy consumption identification and sampling",
+            "Energy audits with costed recommendations",
+            "Evidence of board director sign-off and notification to regulator"
+          ],
+          complianceSteps: [
+            "Assess group structure to confirm ESOS qualification",
+            "Appoint a qualified ESOS lead assessor",
+            "Compile energy consumption data covering a continuous 12-month period",
+            "Determine significant energy consumption and select representative sites",
+            "Complete compliant energy audits or alternative routes (ISO 50001, DEC, GDA)",
+            "Quantify energy-saving opportunities with costs and payback",
+            "Obtain director-level sign-off of the ESOS report",
+            "Submit compliance notification to the Environment Agency portal",
+            "Implement governance for monitoring recommendations",
+            "Maintain records for at least the current and previous compliance periods"
+          ],
+          penalties: "Civil penalties up to £50,000 plus daily fines for ongoing non-compliance"
+        },
+        {
+          id: "uk-srs",
+          name: "Sustainability Reporting Standards",
+          acronym: "UK SRS",
+          authority: "Department for Business and Trade",
+          status: "Proposed",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "UK-listed companies subject to Companies Act reporting",
+            "Large UK private companies preparing strategic reports",
+            "Non-UK issuers seeking UK listing with significant UK investor base"
+          ],
+          timeline: "Government intends to endorse IFRS S1/S2-based UK SRS by July 2024 with reporting expected for periods beginning 2025/2026",
+          officialLink: "https://www.gov.uk/government/publications/developing-uk-sustainability-disclosure-standards",
+          dataRequired: [
+            "Material sustainability-related risks and opportunities across ESG pillars",
+            "Climate resilience scenario analysis and transition plans",
+            "Quantitative and qualitative metrics aligned to IFRS Sustainability Disclosure Standards",
+            "Governance and risk management processes for sustainability matters"
+          ],
+          complianceSteps: [
+            "Monitor UK Endorsement Board consultations and final standards",
+            "Perform gap analysis against IFRS S1 and IFRS S2 disclosure requirements",
+            "Define governance ownership for sustainability reporting",
+            "Develop data architecture covering financial and non-financial metrics",
+            "Enhance climate scenario analysis and transition planning",
+            "Establish controls and assurance-ready documentation",
+            "Integrate SRS disclosures into annual report and accounts",
+            "Engage auditors on limited assurance expectations",
+            "Prepare investor communications on implementation roadmap",
+            "Update processes based on post-implementation reviews"
+          ],
+          penalties: "Expected to align with Financial Reporting Council enforcement for corporate reporting failures"
                 <div class="matcher-form">
                     <div class="form-container">
                         <div class="form-group">
