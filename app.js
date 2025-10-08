@@ -2728,7 +2728,7 @@ function displayCalendarView(container, events, filters) {
   container.innerHTML = `${summary}${monthCalendars}${undatedHTML}`;
 }
 
-}
+
 function displayTimelineView(container, events, filters) {
   const summary = createTimelineSummary(filters, events.length);
 
@@ -2745,8 +2745,7 @@ function displayTimelineView(container, events, filters) {
       const eventDate = event.date ? new Date(event.date) : null;
       const formattedDate = eventDate ? formatTimelineDate(eventDate) : 'Date TBC';
       const regionLabel = event.jurisdiction || timelineRegionLabels[event.region] || 'Global';
-
-      return ``
+     return `
         <div class="timeline-item">
           <div class="timeline-date">
             <span class="timeline-date-primary">${formattedDate}</span>
@@ -2760,7 +2759,7 @@ function displayTimelineView(container, events, filters) {
             <span class="timeline-chip">${event.type}</span>
           </div>
         </div>
-         `;
+ `;
     })
     .join('');
 
@@ -2809,12 +2808,7 @@ function displayGanttView(container, events, filters) {
             <div class="gantt-dates">${formatTimelineDate(start)} – ${formatTimelineDate(end)}</div>
           </div>
         </div>
-        <div class="gantt-row">
-          <div class="gantt-label">California SB253</div>
-          <div class="gantt-bar ca-sb253" style="width: 50%; margin-left: 50%;"></div>
-        </div>
-      </div>
-        `;
+      `;
     })
     .join('');
 
@@ -2863,8 +2857,8 @@ function createTimelineSummary(filters, count) {
   return `
     <div class="timeline-summary">
       Showing <strong>${count}</strong> milestone${count === 1 ? '' : 's'} for <span>${regionLabel}</span> in <span>${summaryYear}</span>
-  `</div>
-    ;
+    </div>
+  `;
 }
 function formatTimelineDate(date) {
   return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
