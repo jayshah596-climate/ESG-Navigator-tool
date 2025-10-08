@@ -2553,7 +2553,6 @@ let currentTimelineView = 'calendar';
 
 function setupTimelineDeadlines() {
   const viewBtns = document.querySelectorAll('.timeline-view');
-   currentTimelineView = view;
   viewBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       viewBtns.forEach(b => b.classList.remove('active'));
@@ -2561,6 +2560,7 @@ function setupTimelineDeadlines() {
       
       const view = this.getAttribute('data-view');
       updateTimelineView(view);
+      currentTimelineView = view;
     });
   });
   
