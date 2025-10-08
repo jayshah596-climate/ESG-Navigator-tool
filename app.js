@@ -1005,6 +1005,310 @@ const regulationsData = {
   }
 };
 
+const regulationIndex = (() => {
+  const index = {};
+  Object.values(regulationsData.regions).forEach(region => {
+    region.regulations.forEach(regulation => {
+      index[regulation.id] = { ...regulation, region: region.name };
+    });
+  });
+  return index;
+})();
+
+const revenueMinimums = {
+  'under-40m': 0,
+  '40m-150m': 40,
+  '150m-450m': 150,
+  'over-450m': 450
+};
+
+const employeeMinimums = {
+  'under-250': 0,
+  '250-500': 250,
+  '500-1000': 500,
+  'over-1000': 1000
+};
+
+function hasRevenueAtLeast(revenue, minimum) {
+  if (!revenue || !(revenue in revenueMinimums)) return false;
+  return revenueMinimums[revenue] >= minimum;
+}
+
+function hasEmployeesAtLeast(employees, minimum) {
+  if (!employees || !(employees in employeeMinimums)) return false;
+  return employeeMinimums[employees] >= minimum;
+}
+
+function isListedCompany(context) {
+  return context.orgType === 'listed-company';
+}
+
+function isFinancialInstitution(context) {
+  return ['financial-institution', 'investment-firm'].includes(context.orgType);
+}
+
+function isLargeCompany(context) {
+  return (
+    ['large-corporation', 'multinational', 'state-owned'].includes(context.orgType) ||
+    isListedCompany(context) ||
+    hasRevenueAtLeast(context.revenue, 450) ||
+    hasEmployeesAtLeast(context.employees, 1000)
+  );
+}
+
+function hasJurisdiction(context, codes) {
+  return codes.some(code => context.jurisdictions.includes(code));
+}
+
+const matcherRules = [
+  {
+    id: 'csrd',
+    jurisdictions: ['eu'],
+    condition: context =>
+      isLargeCompany(context) || hasEmployeesAtLeast(context.employees, 500) || hasRevenueAtLeast(context.revenue, 40),
+    priority: 'High',
+    deadline: 'Phase-in from 2025-2027',
+    reason: 'CSRD captures large or listed entities operating in the EU above €40M revenue or 500 employees.'
+  },
+  {
+    id: 'sfdr',
+    jurisdictions: ['eu'],
+    condition: context => isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Ongoing',
+    reason: 'EU financial market participants must provide SFDR disclosures.'
+  },
+  {
+    id: 'eu-taxonomy',
+    jurisdictions: ['eu'],
+    condition: context => isLargeCompany(context) || isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Full objectives from 2024',
+    reason: 'EU Taxonomy applies to large undertakings and financial market participants in scope of CSRD/SFDR.'
+  },
+  {
+    id: 'eudr',
+    jurisdictions: ['eu'],
+    condition: context =>
+      ['multinational', 'large-corporation', 'state-owned'].includes(context.orgType) ||
+      hasEmployeesAtLeast(context.employees, 250),
+    priority: 'High',
+    deadline: 'Dec 2025 (large) / Jun 2026 (SMEs)',
+    reason: 'EUDR due diligence covers large or multinational operators placing covered commodities on the EU market.'
+  },
+  {
+    id: 'ch-climate',
+    jurisdictions: ['switzerland'],
+    condition: context => isLargeCompany(context) || isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Reports due in 2025 for FY2024',
+    reason: 'Swiss public-interest entities over size thresholds must publish climate and environmental reports.'
+  },
+  {
+    id: 'no-trans',
+    jurisdictions: ['norway'],
+    condition: context =>
+      isLargeCompany(context) || hasEmployeesAtLeast(context.employees, 50) || hasRevenueAtLeast(context.revenue, 40),
+    priority: 'High',
+    deadline: 'Annual transparency statement by 30 June',
+    reason: 'Norwegian Transparency Act covers large enterprises with operations or sales in Norway.'
+  },
+  {
+    id: 'fr-art29',
+    jurisdictions: ['france'],
+    condition: context => isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Annual reporting (FY2021 onwards)',
+    reason: 'French financial institutions must deliver Article 29 energy transition disclosures.'
+  },
+  {
+    id: 'uk-sdr',
+    jurisdictions: ['uk'],
+    condition: context => isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Entity reports live; product labels from 2024',
+    reason: 'FCA-regulated asset managers and insurers must comply with UK SDR.'
+  },
+  {
+    id: 'uk-secr',
+    jurisdictions: ['uk'],
+    condition: context =>
+      isListedCompany(context) || isLargeCompany(context) || hasEmployeesAtLeast(context.employees, 250) || hasRevenueAtLeast(context.revenue, 36),
+    priority: 'High',
+    deadline: 'Annual SECR filing with directors’ report',
+    reason: 'UK quoted and large unquoted companies must report energy and carbon information.'
+  },
+  {
+    id: 'uk-esos',
+    jurisdictions: ['uk'],
+    condition: context => hasEmployeesAtLeast(context.employees, 250) || hasRevenueAtLeast(context.revenue, 44) || isLargeCompany(context),
+    priority: 'Medium',
+    deadline: 'Phase 4 compliance by 5 Dec 2027',
+    reason: 'Large UK undertakings must complete ESOS energy audits each phase.'
+  },
+  {
+    id: 'uk-srs',
+    jurisdictions: ['uk'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'Medium',
+    deadline: 'Expected adoption for FY2025/26',
+    reason: 'Upcoming UK Sustainability Reporting Standards will cover large and listed UK entities.'
+  },
+  {
+    id: 'sec-climate',
+    jurisdictions: ['us'],
+    condition: context => isListedCompany(context),
+    priority: 'Medium',
+    deadline: 'Implementation currently suspended',
+    reason: 'SEC climate rules target US-listed registrants once in force.'
+  },
+  {
+    id: 'ca-sb253',
+    jurisdictions: ['california'],
+    condition: context => hasRevenueAtLeast(context.revenue, 450) || isLargeCompany(context),
+    priority: 'High',
+    deadline: 'Scope 1&2 in 2026, Scope 3 in 2027',
+    reason: 'California SB 253 applies to companies over $1B revenue doing business in the state.'
+  },
+  {
+    id: 'ca-ifrs-s',
+    jurisdictions: ['canada'],
+    condition: context => isListedCompany(context) || isLargeCompany(context) || isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'CSSB targeting FY2025 adoption',
+    reason: 'Canadian issuers are preparing for IFRS S1/S2-aligned sustainability disclosure standards.'
+  },
+  {
+    id: 'bmv-esg',
+    jurisdictions: ['mexico'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'Medium',
+    deadline: 'Annual exchange ESG questionnaire',
+    reason: 'BMV guidance encourages listed Mexican issuers to provide comprehensive ESG disclosure.'
+  },
+  {
+    id: 'brsr-india',
+    jurisdictions: ['india'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'High',
+    deadline: 'Mandatory from FY2022-23',
+    reason: 'India’s top listed companies must file the Business Responsibility and Sustainability Report.'
+  },
+  {
+    id: 'rbi-climate',
+    jurisdictions: ['india'],
+    condition: context => isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Climate risk integration from FY2023-24',
+    reason: 'RBI guidance applies to regulated banks and NBFCs managing climate risk.'
+  },
+  {
+    id: 'nz-crd',
+    jurisdictions: ['new-zealand'],
+    condition: context => isListedCompany(context) || isLargeCompany(context) || isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Climate statements due from 2024',
+    reason: 'New Zealand climate reporting entities must publish climate-related disclosures.'
+  },
+  {
+    id: 'au-climate',
+    jurisdictions: ['australia'],
+    condition: context => hasRevenueAtLeast(context.revenue, 50) || hasEmployeesAtLeast(context.employees, 100) || isLargeCompany(context),
+    priority: 'High',
+    deadline: 'Phase-in from FY2024-25',
+    reason: 'Australian climate disclosure regime covers large entities by phased thresholds.'
+  },
+  {
+    id: 'tse-esg',
+    jurisdictions: ['japan'],
+    condition: context => isListedCompany(context),
+    priority: 'Medium',
+    deadline: 'Corporate Governance Code updates 2022',
+    reason: 'Tokyo Stock Exchange requires listed issuers to provide enhanced ESG disclosure.'
+  },
+  {
+    id: 'hkex-esg',
+    jurisdictions: ['hong-kong'],
+    condition: context => isListedCompany(context),
+    priority: 'High',
+    deadline: 'Annual ESG report within 5 months of year end',
+    reason: 'HKEX ESG Reporting Guide is mandatory on a comply-or-explain basis for listed companies.'
+  },
+  {
+    id: 'sgx-sr',
+    jurisdictions: ['singapore'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'High',
+    deadline: 'Climate reporting from FY2023 for priority sectors',
+    reason: 'SGX issuers must deliver sustainability reporting aligned with ISSB/TCFD guidance.'
+  },
+  {
+    id: 'csrc-esg',
+    jurisdictions: ['china'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'Medium',
+    deadline: 'Enhanced ESG disclosures for 2024 reports',
+    reason: 'CSRC guidance elevates ESG disclosure expectations for Chinese listed companies.'
+  },
+  {
+    id: 'k-esg',
+    jurisdictions: ['south-korea'],
+    condition: context => isListedCompany(context) || isLargeCompany(context),
+    priority: 'Medium',
+    deadline: 'Phased rollout beginning 2025',
+    reason: 'Korean listed entities face mandatory ESG disclosure on a phased basis.'
+  },
+  {
+    id: 'brazil-cvm',
+    jurisdictions: ['brazil'],
+    condition: context => isListedCompany(context) || isFinancialInstitution(context),
+    priority: 'High',
+    deadline: 'Effective for 2023 filings',
+    reason: 'Brazilian CVM rules mandate ESG disclosures for listed issuers and funds.'
+  },
+  {
+    id: 'ifrs-s1',
+    jurisdictions: ['eu', 'uk', 'canada', 'australia', 'new-zealand', 'singapore', 'japan', 'south-korea'],
+    condition: context => (isListedCompany(context) || isLargeCompany(context)) && context.jurisdictions.length > 0,
+    priority: 'Medium',
+    deadline: 'Effective 2024 in adopting markets',
+    reason: 'Jurisdictions adopting ISSB standards expect large or listed entities to apply IFRS S1.'
+  },
+  {
+    id: 'ifrs-s2',
+    jurisdictions: ['eu', 'uk', 'canada', 'australia', 'new-zealand', 'singapore', 'japan', 'south-korea'],
+    condition: context => (isListedCompany(context) || isLargeCompany(context)) && context.jurisdictions.length > 0,
+    priority: 'Medium',
+    deadline: 'Effective 2024 in adopting markets',
+    reason: 'IFRS S2 climate disclosures accompany IFRS S1 in adopting jurisdictions for large entities.'
+  },
+  {
+    id: 'tcfd',
+    jurisdictions: ['uk', 'canada', 'new-zealand', 'japan', 'singapore', 'hong-kong', 'australia', 'eu'],
+    condition: context => isLargeCompany(context) || isFinancialInstitution(context),
+    priority: 'Medium',
+    deadline: 'Ongoing (mandatory in several markets)',
+    reason: 'TCFD-aligned reporting is expected for large and financial institutions across selected markets.'
+  },
+  {
+    id: 'gri-standards',
+    condition: context => isLargeCompany(context) || context.jurisdictions.length >= 2,
+    priority: 'Low',
+    deadline: 'Universal Standards effective 2023',
+    reason: 'Global stakeholders expect broad-impact organizations to report using GRI Standards.'
+  },
+  {
+    id: 'sasb-standards',
+    condition: context => isListedCompany(context) || isFinancialInstitution(context),
+    priority: 'Low',
+    deadline: 'Investor-focused standards (ongoing)',
+    reason: 'SASB industry metrics support investor reporting for listed or financially material entities.'
+  }
+];
+
+const priorityOrder = { High: 0, Medium: 1, Low: 2 };
+
+
 // Global application state
 let currentSection = 'executive-overview';
 let selectedRegulations = [];
@@ -1158,7 +1462,7 @@ function analyzeOrganization() {
   const orgType = document.getElementById('orgType').value;
   const revenue = document.getElementById('revenue').value;
   const employees = document.getElementById('employees').value;
-  const jurisdictions = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+  const jurisdictions = Array.from(document.querySelectorAll('.matcher-form .jurisdiction-checkbox:checked')).map(cb => cb.value);
   
   if (!orgType) {
     alert('Please select an organization type');
@@ -1170,25 +1474,24 @@ function analyzeOrganization() {
 }
 
 function determineApplicableRegulations(orgType, revenue, employees, jurisdictions) {
+  const context = { orgType, revenue, employees, jurisdictions };
   const applicableRegs = [];
-  
-  // CSRD Logic
-  if (jurisdictions.includes('eu')) {
-    if (orgType === 'large-corporation' || 
-        orgType === 'listed-company' || 
-        revenue === 'over-450m' || 
-        employees === 'over-1000') {
-      applicableRegs.push({
-        regulation: 'CSRD',
-        priority: 'High',
-        deadline: '2025-04-30',
-        reason: 'Large company or listed in EU'
-      });
-    }
-  }
-  
-  // SFDR Logic
-  if (jurisdictions.includes('eu') && orgType === 'financial-institution') {
+  const seen = new Set();
+
+  matcherRules.forEach(rule => {
+    const matchesJurisdiction = !rule.jurisdictions || hasJurisdiction(context, rule.jurisdictions);
+    if (!matchesJurisdiction) return;
+    if (!rule.condition(context)) return;
+
+    if (seen.has(rule.id)) return;
+    seen.add(rule.id);
+
+    const metadata = regulationIndex[rule.id] || {};
+    const priority = typeof rule.priority === 'function' ? rule.priority(context, metadata) : (rule.priority || 'Medium');
+    const reason = typeof rule.reason === 'function' ? rule.reason(context, metadata) : (rule.reason || `Applicable in ${metadata.region || 'selected jurisdiction'}.`);
+    const deadline = typeof rule.deadline === 'function' ? rule.deadline(context, metadata) : (rule.deadline || metadata.timeline || 'See official timeline');
+    const label = metadata.name ? `${metadata.name}${metadata.acronym ? ` (${metadata.acronym})` : ''}` : rule.id.toUpperCase();
+ 
     applicableRegs.push({
       regulation: 'SFDR',
       priority: 'High',
@@ -1220,30 +1523,23 @@ function determineApplicableRegulations(orgType, revenue, employees, jurisdictio
   // UK SDR Logic
   if (jurisdictions.includes('uk') && orgType === 'financial-institution') {
     applicableRegs.push({
-      regulation: 'UK SDR',
-      priority: 'High',
-      deadline: 'Ongoing',
-      reason: 'Financial institution in UK'
+      regulationId: rule.id,
+      regulation: label,
+      priority,
+      deadline,
+      reason,
+      region: metadata.region || null
     });
-  }
   
-  // International Standards
-  applicableRegs.push({
-    regulation: 'TCFD',
-    priority: 'Medium',
-    deadline: 'Voluntary',
-    reason: 'Best practice for climate disclosures'
   });
-  
-  if (orgType === 'large-corporation' || orgType === 'listed-company') {
-    applicableRegs.push({
-      regulation: 'IFRS S1/S2',
-      priority: 'Medium',
-      deadline: 'Varies by jurisdiction',
-      reason: 'Large/listed company - international standards'
-    });
-  }
-  
+   
+  applicableRegs.sort((a, b) => {
+    const priorityDiff = (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3);
+    if (priorityDiff !== 0) return priorityDiff;
+    return a.regulation.localeCompare(b.regulation);
+  });
+
+
   return applicableRegs;
 }
 
@@ -1253,6 +1549,21 @@ function displayMatcherResults(results) {
   
   matcherResults = results;
   
+  if (results.length === 0) {
+    resultsContainer.innerHTML = `
+      <div class="results-header">
+        <h3>Analysis Results</h3>
+        <div class="results-summary">
+          <span class="summary-item total">Total Applicable: 0</span>
+        </div>
+      </div>
+      <div class="applicable-regulations">
+        <p>No regulations matched the current profile. Adjust the operating jurisdictions or organization details to see applicable obligations.</p>
+      </div>
+    `;
+    return;
+  }
+
   const priorityCounts = results.reduce((acc, reg) => {
     acc[reg.priority] = (acc[reg.priority] || 0) + 1;
     return acc;
@@ -1300,7 +1611,7 @@ function resetMatcherForm() {
   document.getElementById('orgType').value = '';
   document.getElementById('revenue').value = '';
   document.getElementById('employees').value = '';
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('.matcher-form .jurisdiction-checkbox').forEach(cb => (cb.checked = false));
   document.getElementById('matcherResults').innerHTML = '';
 }
 
@@ -1309,11 +1620,9 @@ function generateRoadmapFromMatcher() {
     switchSection('compliance-roadmap');
     // Pre-select regulations from matcher results
     const checkboxes = document.querySelectorAll('#roadmapRegulations input[type="checkbox"]');
+    const selectedIds = new Set(matcherResults.map(result => result.regulationId));
     checkboxes.forEach(cb => {
-      const regName = cb.value;
-      if (matcherResults.some(result => result.regulation.toLowerCase().includes(regName.toLowerCase()))) {
-        cb.checked = true;
-      }
+    cb.checked = selectedIds.has(cb.value); 
     });
   }
 }
