@@ -1493,36 +1493,6 @@ function determineApplicableRegulations(orgType, revenue, employees, jurisdictio
     const label = metadata.name ? `${metadata.name}${metadata.acronym ? ` (${metadata.acronym})` : ''}` : rule.id.toUpperCase();
  
     applicableRegs.push({
-      regulation: 'SFDR',
-      priority: 'High',
-      deadline: 'Ongoing',
-      reason: 'Financial institution in EU'
-    });
-  }
-  
-  // SEC Climate Logic
-  if (jurisdictions.includes('us') && orgType === 'listed-company') {
-    applicableRegs.push({
-      regulation: 'SEC Climate Rules',
-      priority: 'Medium',
-      deadline: 'Suspended',
-      reason: 'US public company (currently suspended)'
-    });
-  }
-  
-  // California SB253 Logic
-  if (jurisdictions.includes('california') && revenue === 'over-450m') {
-    applicableRegs.push({
-      regulation: 'California SB 253',
-      priority: 'High',
-      deadline: '2026-01-01',
-      reason: '>$1B revenue company in California'
-    });
-  }
-  
-  // UK SDR Logic
-  if (jurisdictions.includes('uk') && orgType === 'financial-institution') {
-    applicableRegs.push({
       regulationId: rule.id,
       regulation: label,
       priority,
@@ -1530,8 +1500,7 @@ function determineApplicableRegulations(orgType, revenue, employees, jurisdictio
       reason,
       region: metadata.region || null
     });
-  
-  });
+    });
    
   applicableRegs.sort((a, b) => {
     const priorityDiff = (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3);
