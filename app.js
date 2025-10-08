@@ -1629,12 +1629,260 @@ function scheduleRoadmapReview() {
 }
 
 // Data Requirements Matrix
+const dataRequirementsMatrix = [
+  {
+    requirement: "Scope 1 GHG emissions (metric tons CO₂e)",
+    description: "Gross direct greenhouse gas emissions from owned or controlled operations reported with organisational and market/location-based boundaries.",
+    category: "climate",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E1-6 requires disclosure of absolute Scope 1 emissions with base year and methodology.",
+    sfdr: "Mandatory – PAI 1(a) obliges financial market participants to report investee companies' Scope 1 emissions.",
+    sec: "Mandatory – SEC Climate Disclosure Rule requires large filers to disclose Scope 1 emissions when material, subject to assurance phase-in.",
+    tcfdIssb: "Mandatory – IFRS S2 §21 (TCFD-aligned) requires Scope 1 emissions in CO₂e with consolidation approach disclosed."
+  },
+  {
+    requirement: "Scope 2 GHG emissions (market & location based)",
+    description: "Indirect emissions from purchased electricity, steam, heat and cooling, separated into market-based and location-based totals.",
+    category: "climate",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E1-6 requires gross Scope 2 emissions for both market and location methodologies.",
+    sfdr: "Mandatory – PAI 1(b) requires Scope 2 emissions for investee companies.",
+    sec: "Mandatory – SEC Climate Disclosure Rule requires Scope 2 emissions disclosures for large filers when material, with assurance requirements.",
+    tcfdIssb: "Mandatory – IFRS S2 §21 requires Scope 2 emissions and methodologies consistent with the GHG Protocol."
+  },
+  {
+    requirement: "Scope 3 GHG emissions by category",
+    description: "Material value chain emissions disclosed by relevant Scope 3 categories and accompanied by data quality discussion.",
+    category: "climate",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E1-6 requires Scope 3 totals with category breakdown where material and explanation of exclusions.",
+    sfdr: "Mandatory – PAI 1(c) requires total Scope 3 emissions and coverage percentage for investee companies.",
+    sec: "Mandatory – SEC climate rule requires Scope 3 disclosure when material or when targets include Scope 3, with safe harbour provisions.",
+    tcfdIssb: "Mandatory – IFRS S2 §21 requires material Scope 3 categories, methodologies and assumptions disclosed."
+  },
+  {
+    requirement: "GHG emissions intensity (tCO₂e per net revenue)",
+    description: "Greenhouse gas intensity metrics normalised by economic output (e.g., tonnes CO₂e per € million of revenue).",
+    category: "climate",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E1-7 requires at least one GHG intensity metric relative to net revenue and other relevant denominators.",
+    sfdr: "Mandatory – PAI 3 demands carbon footprint and GHG intensity of investee companies per revenue.",
+    sec: "Mandatory – SEC climate rule requires intensity metrics whenever Scope 1 and 2 are disclosed.",
+    tcfdIssb: "Mandatory – IFRS S2 §28 requires intensity metrics linked to absolute emissions for comparability."
+  },
+  {
+    requirement: "Renewable and low-carbon energy consumption share",
+    description: "Percentage of total energy consumption derived from renewable and low-carbon sources, including self-generated energy.",
+    category: "climate",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E1-5 requires disclosure of energy consumption by source, highlighting renewable share.",
+    sfdr: "Mandatory – PAI 7 requires reporting share of non-renewable energy consumption and production.",
+    sec: "Optional – disclose when energy mix is material to climate strategy or targets under the SEC climate rule.",
+    tcfdIssb: "Mandatory – IFRS S2 §32 requires energy mix metrics including proportion of low-carbon energy."
+  },
+  {
+    requirement: "Internal carbon pricing systems",
+    description: "Existence, scope and monetary value of internal carbon price(s) applied to investment or operational decisions.",
+    category: "climate",
+    dataType: "qualitative",
+    csrd: "Mandatory when applicable – ESRS E1-4 requires disclosure of internal carbon prices used and underlying assumptions.",
+    sfdr: "Optional – can support sustainability risk policies but not a core PAI indicator.",
+    sec: "Mandatory when used – SEC climate rule requires registrants using carbon pricing to disclose price levels and scope.",
+    tcfdIssb: "Mandatory when used – IFRS S2 §30 (TCFD) requires details on internal carbon prices applied."
+  },
+  {
+    requirement: "Climate resilience scenario analysis",
+    description: "Narrative on scenario analysis performed, time horizons, reference scenarios and implications for strategy and financial planning.",
+    category: "climate",
+    dataType: "qualitative",
+    csrd: "Mandatory – ESRS E1-1 requires analysing business resilience to at least one 1.5°C scenario and disclosing methodologies.",
+    sfdr: "Optional – supports narrative for Article 8/9 products but not prescribed as a PAI metric.",
+    sec: "Mandatory when conducted – SEC climate rule requires registrants to describe material use of scenario analysis and results.",
+    tcfdIssb: "Mandatory – IFRS S2 §§14-16 require disclosure of climate resilience assessments based on scenario analysis."
+  },
+  {
+    requirement: "Water withdrawal and discharge intensity",
+    description: "Volumes of water withdrawn and discharged, broken down by source and intensity per unit of production in high-risk areas.",
+    category: "environment",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E3 requires water withdrawal, consumption and discharge data with intensity metrics for material locations.",
+    sfdr: "Mandatory – PAI 6 covers water emissions, including metrics on water consumption intensity for investees in high-water-stress areas.",
+    sec: "Optional – disclose when water risks materially affect financial statements or climate-related risks.",
+    tcfdIssb: "Recommended – IFRS S1 expects material water metrics, and IFRS S2 highlights water intensity for physical risk exposure."
+  },
+  {
+    requirement: "Waste generation and hazardous waste ratio",
+    description: "Total waste generated, treatment routes and proportion classified as hazardous or diverted from landfill.",
+    category: "environment",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E5 requires disclosure of waste generated, recycled and hazardous share with targets.",
+    sfdr: "Mandatory – PAI 9 tracks hazardous waste ratio for investee companies.",
+    sec: "Optional – provide if waste management is material to climate risk or regulatory compliance disclosures.",
+    tcfdIssb: "Recommended – IFRS S1 expects waste metrics when material to resource use and circular economy strategy."
+  },
+  {
+    requirement: "Operations in biodiversity-sensitive areas",
+    description: "Share of sites or revenues located in or adjacent to protected areas and related mitigation actions.",
+    category: "environment",
+    dataType: "qualitative",
+    csrd: "Mandatory – ESRS E4 requires identification of material impacts and metrics for assets in protected or high biodiversity areas.",
+    sfdr: "Mandatory – PAI 7 indicators include share of investments in companies operating near biodiversity-sensitive areas.",
+    sec: "Optional – disclose when biodiversity impacts create material risks or expenditures.",
+    tcfdIssb: "Recommended – IFRS S1 calls for nature-related disclosures where material, aligned with TNFD/TCFD guidance."
+  },
+  {
+    requirement: "Air pollutant emissions (NOx, SOx, PM)",
+    description: "Quantities of key air pollutants released, including nitrogen oxides, sulphur oxides and particulate matter.",
+    category: "environment",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS E2 requires disclosure of significant air pollutants including NOx, SOx, NMVOC, NH₃ and PM.",
+    sfdr: "Mandatory – PAI 5 demands intensity of investee emissions of air pollutants (NOx, SOx, NMVOC, NH₃, PM2.5).",
+    sec: "Optional – disclose when pollutant regulation or compliance materially affects operations.",
+    tcfdIssb: "Recommended – IFRS S1 requires pollutant metrics when material to sustainability-related risks."
+  },
+  {
+    requirement: "Deforestation-free commodity traceability",
+    description: "Traceability coverage, geolocation data and due diligence outcomes for forest-risk commodities in the value chain.",
+    category: "environment",
+    dataType: "qualitative",
+    csrd: "Mandatory when material – ESRS E5/E4 require explaining sourcing policies and controls for deforestation-risk commodities.",
+    sfdr: "Optional – supports disclosures for Article 8/9 products on sustainable sourcing but not a core PAI.",
+    sec: "Optional – disclose if supply-chain deforestation exposure represents a material risk or expenditure.",
+    tcfdIssb: "Recommended – IFRS S1 encourages nature-related disclosures consistent with TNFD for material supply-chain impacts."
+  },
+  {
+    requirement: "Gender pay gap (unadjusted)",
+    description: "Difference between average remuneration of men and women expressed as a percentage of men's pay.",
+    category: "social",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS S1 requires disclosure of gender pay gap metrics and remediation actions.",
+    sfdr: "Mandatory – PAI 12 requires unadjusted gender pay gap for investee companies.",
+    sec: "Optional – disclose under human capital reporting when pay equity is material.",
+    tcfdIssb: "Recommended – IFRS S1 expects disclosure of significant workforce diversity metrics when material."
+  },
+  {
+    requirement: "Employee turnover and retention",
+    description: "Annual employee turnover rate with segmentation by region or role and description of retention strategies.",
+    category: "social",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS S1 requires disclosure of employee turnover rates and retention measures.",
+    sfdr: "Optional – may be used in additional SFDR indicators for social performance but not core PAIs.",
+    sec: "Optional – disclose when turnover materially affects human capital under Regulation S-K Item 101(c).",
+    tcfdIssb: "Recommended – IFRS S1 encourages workforce stability metrics where material."
+  },
+  {
+    requirement: "Occupational injury frequency rate",
+    description: "Recordable work-related injuries per 200,000 hours worked (or local equivalent) covering employees and contractors.",
+    category: "social",
+    dataType: "quantitative",
+    csrd: "Mandatory – ESRS S1 requires disclosure of injury rates, severity and fatalities for employees and workers in the value chain.",
+    sfdr: "Optional – can be reported as additional sustainability indicator for Article 8/9 products.",
+    sec: "Optional – disclose when workplace safety materially impacts operations or legal proceedings.",
+    tcfdIssb: "Recommended – IFRS S1 requires material health and safety metrics for workforce resilience."
+  },
+  {
+    requirement: "Human rights due diligence processes",
+    description: "Processes for identifying, preventing, mitigating and remediating human rights impacts across operations and value chain.",
+    category: "social",
+    dataType: "qualitative",
+    csrd: "Mandatory – ESRS S2/S3 require detailed disclosure of due diligence approach, salient issues and remediation outcomes.",
+    sfdr: "Mandatory – Article 4 PAI statements must describe due diligence policies regarding principal adverse impacts on human rights.",
+    sec: "Optional – disclose when human rights risks are material under human capital requirements.",
+    tcfdIssb: "Recommended – IFRS S1 expects explanation of due diligence for material sustainability-related risks and opportunities."
+  },
+  {
+    requirement: "Value chain labour rights incidents",
+    description: "Number of severe human rights or labour incidents identified in the supply chain and status of remediation actions.",
+    category: "social",
+    dataType: "qualitative",
+    csrd: "Mandatory – ESRS S2 requires metrics on severe human rights incidents in own operations and the value chain.",
+    sfdr: "Mandatory – PAI 10 tracks violations of UNGC principles and OECD guidelines among investees.",
+    sec: "Optional – disclose when incidents give rise to material legal or reputational risks.",
+    tcfdIssb: "Recommended – IFRS S1 requires disclosure of material incidents and responses affecting sustainability performance."
+  },
+  {
+    requirement: "Board oversight of sustainability matters",
+    description: "Structure, frequency and expertise of board or committee oversight of sustainability and climate-related matters.",
+    category: "governance",
+    dataType: "governance",
+    csrd: "Mandatory – ESRS G1 requires governance disclosures on board oversight, roles and responsibilities for sustainability matters.",
+    sfdr: "Mandatory – SFDR Articles 3 and 5 require integration of sustainability risks into governance and remuneration policies.",
+    sec: "Mandatory – SEC climate rule requires description of board oversight of climate-related risks and governance processes.",
+    tcfdIssb: "Mandatory – IFRS S1/S2 require governance disclosures aligned with the TCFD governance pillar."
+  },
+  {
+    requirement: "Management remuneration linked to sustainability targets",
+    description: "Extent to which executive incentive plans incorporate climate or broader sustainability performance conditions.",
+    category: "governance",
+    dataType: "governance",
+    csrd: "Mandatory – ESRS G1 requires entities to explain how remuneration policies align with sustainability targets.",
+    sfdr: "Mandatory – Article 5 requires financial market participants to describe how remuneration policies are consistent with sustainability risks.",
+    sec: "Mandatory when applicable – SEC climate rule requires disclosure if compensation is linked to achievement of climate-related targets.",
+    tcfdIssb: "Recommended – IFRS S1 expects disclosure of incentive structures tied to sustainability outcomes when material."
+  },
+  {
+    requirement: "Controls and assurance over sustainability data",
+    description: "Internal control environment, audit trail and assurance status for sustainability information, including external assurance plans.",
+    category: "governance",
+    dataType: "governance",
+    csrd: "Mandatory – ESRS G1 requires disclosure of internal control systems and assurance approach for sustainability information.",
+    sfdr: "Optional – robust controls support PAI disclosures but are not explicitly mandated beyond general governance expectations.",
+    sec: "Mandatory – SEC climate rule requires description of processes for identifying, assessing and managing climate-related risks including controls over relevant data.",
+    tcfdIssb: "Mandatory – IFRS S1 expects disclosure of governance and controls ensuring reliability of sustainability reporting."
+  },
+  {
+    requirement: "Integration of climate risk into enterprise risk management",
+    description: "Processes for identifying, assessing and prioritising climate-related risks within the broader enterprise risk framework.",
+    category: "governance",
+    dataType: "governance",
+    csrd: "Mandatory – ESRS E1 and ESRS G1 require integration of climate-related risks into risk management and internal control systems.",
+    sfdr: "Mandatory – Article 3 requires disclosure of policies on the integration of sustainability risks in investment decision-making.",
+    sec: "Mandatory – SEC climate rule requires registrants to describe climate risk identification, assessment and management processes.",
+    tcfdIssb: "Mandatory – IFRS S2 §§18-19 require disclosure of climate risk management processes aligned with the TCFD framework."
+  },
+  {
+    requirement: "Stakeholder engagement on sustainability topics",
+    description: "Approach to engaging workers, communities, investors and other stakeholders on sustainability priorities and feedback loops.",
+    category: "governance",
+    dataType: "qualitative",
+    csrd: "Mandatory – ESRS S1/S3/G1 require explanation of stakeholder engagement processes and integration into decision-making.",
+    sfdr: "Optional – recommended to demonstrate consideration of principal adverse impacts but not prescribed.",
+    sec: "Optional – disclose when stakeholder feedback materially influences strategy or risk management.",
+    tcfdIssb: "Recommended – IFRS S1 encourages disclosure of stakeholder engagement informing sustainability strategy."
+  }
+];
+
+const dataMatrixCategoryLabels = {
+  climate: "Climate",
+  environment: "Environment",
+  social: "Social",
+  governance: "Governance"
+};
+
+const dataMatrixTypeLabels = {
+  quantitative: "Quantitative Metric",
+  qualitative: "Qualitative Disclosure",
+  governance: "Governance Practice"
+};
+
 function setupDataRequirements() {
   const exportBtn = document.getElementById('exportDataMatrix');
   if (exportBtn) {
     exportBtn.addEventListener('click', exportDataMatrix);
   }
   
+  const categorySelect = document.getElementById('dataCategory');
+  const typeSelect = document.getElementById('dataType');
+
+  if (categorySelect) {
+    categorySelect.addEventListener('change', displayDataMatrix);
+  }
+
+  if (typeSelect) {
+    typeSelect.addEventListener('change', displayDataMatrix);
+  }
+
+
   displayDataMatrix();
 }
 
@@ -1642,57 +1890,44 @@ function displayDataMatrix() {
   const matrixContainer = document.getElementById('dataMatrix');
   if (!matrixContainer) return;
   
-  const sampleData = [
-    {
-      requirement: "Scope 1 GHG Emissions",
-      csrd: "Required",
-      sfdr: "Optional",
-      sec: "If Material",
-      tcfd: "Recommended",
-      category: "climate"
-    },
-    {
-      requirement: "Scope 2 GHG Emissions",
-      csrd: "Required",
-      sfdr: "Optional", 
-      sec: "If Material",
-      tcfd: "Recommended",
-      category: "climate"
-    },
-    {
-      requirement: "Scope 3 GHG Emissions",
-      csrd: "Required",
-      sfdr: "Required",
-      sec: "If Material & Targets",
-      tcfd: "Recommended",
-      category: "climate"
-    },
-    {
-      requirement: "Water Consumption",
-      csrd: "If Material",
-      sfdr: "Not Required",
-      sec: "Not Required",
-      tcfd: "Not Required",
-      category: "environment"
-    },
-    {
-      requirement: "Board Diversity",
-      csrd: "Required",
-      sfdr: "Not Required",
-      sec: "Not Required", 
-      tcfd: "Not Required",
-      category: "governance"
-    },
-    {
-      requirement: "Employee Safety Metrics",
-      csrd: "If Material",
-      sfdr: "PAI Indicator",
-      sec: "Not Required",
-      tcfd: "Not Required",
-      category: "social"
-    }
-  ];
-  
+  const categorySelect = document.getElementById('dataCategory');
+  const typeSelect = document.getElementById('dataType');
+
+  const categoryFilter = categorySelect ? categorySelect.value : '';
+  const typeFilter = typeSelect ? typeSelect.value : '';
+
+  const filteredData = dataRequirementsMatrix.filter(item => {
+    const categoryMatch = !categoryFilter || item.category === categoryFilter;
+    const typeMatch = !typeFilter || item.dataType === typeFilter;
+    return categoryMatch && typeMatch;
+  });
+
+  if (!filteredData.length) {
+    matrixContainer.innerHTML = `
+      <div class="matrix-empty">
+        <p>No data requirements match the selected filters. Adjust the category or data type to view relevant metrics.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const tableRows = filteredData.map(row => `
+    <tr>
+      <td>
+        <div class="requirement-name">${row.requirement}</div>
+        <div class="requirement-description">${row.description}</div>
+        <div class="requirement-tags">
+          <span class="tag tag--category tag--${row.category}">${dataMatrixCategoryLabels[row.category] || row.category}</span>
+          <span class="tag tag--type tag--${row.dataType}">${dataMatrixTypeLabels[row.dataType] || row.dataType}</span>
+        </div>
+      </td>
+      <td class="${getRequirementClass(row.csrd)}">${row.csrd}</td>
+      <td class="${getRequirementClass(row.sfdr)}">${row.sfdr}</td>
+      <td class="${getRequirementClass(row.sec)}">${row.sec}</td>
+      <td class="${getRequirementClass(row.tcfdIssb)}">${row.tcfdIssb}</td>
+    </tr>
+  `).join('');
+
   matrixContainer.innerHTML = `
     <table class="matrix-table">
       <thead>
@@ -1701,27 +1936,25 @@ function displayDataMatrix() {
           <th>CSRD</th>
           <th>SFDR</th>
           <th>SEC</th>
-          <th>TCFD</th>
+          <th>TCFD/ISSB</th>
         </tr>
       </thead>
       <tbody>
-        ${sampleData.map(row => `
-          <tr>
-            <td><strong>${row.requirement}</strong></td>
-            <td class="${getRequirementClass(row.csrd)}">${row.csrd}</td>
-            <td class="${getRequirementClass(row.sfdr)}">${row.sfdr}</td>
-            <td class="${getRequirementClass(row.sec)}">${row.sec}</td>
-            <td class="${getRequirementClass(row.tcfd)}">${row.tcfd}</td>
-          </tr>
-        `).join('')}
-      </tbody>
+       ${tableRows}
+       </tbody>
     </table>
   `;
 }
 
 function getRequirementClass(requirement) {
-  if (requirement.includes('Required')) return 'required';
-  if (requirement.includes('Material') || requirement.includes('Optional')) return 'optional';
+  if (!requirement) return 'not-required';
+  const lowerReq = requirement.toLowerCase();
+  if (lowerReq.includes('mandatory') || lowerReq.includes('required') || lowerReq.includes('must')) {
+    return 'required';
+  }
+  if (lowerReq.includes('optional') || lowerReq.includes('material') || lowerReq.includes('encouraged') || lowerReq.includes('comply')) {
+    return 'optional';
+  }  
   return 'not-required';
 }
 
