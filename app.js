@@ -2241,8 +2241,319 @@ function exportDataMatrix() {
 }
 
 // Timeline & Deadlines
+const timelineEvents = [
+  {
+    id: 'csrd-large-2025',
+    regulation: 'Corporate Sustainability Reporting Directive (CSRD)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2025-04-30',
+    startDate: '2024-01-01',
+    endDate: '2025-04-30',
+    milestone: 'First CSRD sustainability statements for FY2024',
+    description:
+      'Large public-interest entities must publish ESRS-aligned sustainability statements alongside FY2024 annual reports.',
+    organizationTypes: [
+      'EU large public-interest companies (>500 employees)',
+      'Non-EU parents with >€150M EU revenue and an EU branch/subsidiary'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'csrd-large-2026',
+    regulation: 'Corporate Sustainability Reporting Directive (CSRD)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2026-04-30',
+    startDate: '2025-01-01',
+    endDate: '2026-04-30',
+    milestone: 'All other large EU companies submit first CSRD report for FY2025',
+    description:
+      'Large EU undertakings not previously in scope must deliver their inaugural ESRS report covering FY2025 data within four months of year-end.',
+    organizationTypes: [
+      'EU large undertakings meeting two of: >250 employees, >€40M turnover, >€20M total assets',
+      'Non-EU subsidiaries that exceed the large undertaking thresholds'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'csrd-sme-2027',
+    regulation: 'Corporate Sustainability Reporting Directive (CSRD)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2027-04-30',
+    startDate: '2026-01-01',
+    endDate: '2027-04-30',
+    milestone: 'Listed SMEs (that did not opt out) file first CSRD report for FY2026',
+    description:
+      'EU listed SMEs remaining in scope must publish ESRS disclosures for FY2026 data, unless they have used the opt-out deferral.',
+    organizationTypes: [
+      'EU listed SMEs exceeding two of: >10 employees, >€900K turnover, >€450K total assets',
+      'SMEs from third countries listed on EU regulated markets'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'csrd-third-country-2028',
+    regulation: 'Corporate Sustainability Reporting Directive (CSRD)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2028-01-01',
+    startDate: '2028-01-01',
+    endDate: '2029-06-30',
+    milestone: 'First reporting period begins for third-country parent groups',
+    description:
+      'Non-EU parent companies with significant EU turnover start the FY2028 reporting period that will require consolidated CSRD reporting in 2029.',
+    organizationTypes: [
+      'Non-EU parent undertakings generating >€150M EU turnover with at least one EU subsidiary or branch'
+    ],
+    type: 'Reporting period start'
+  },
+  {
+    id: 'eudr-large-2025',
+    regulation: 'EU Deforestation Regulation (EUDR)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2025-12-30',
+    startDate: '2024-06-29',
+    endDate: '2025-12-30',
+    milestone: 'Due diligence statements required for large operators and traders',
+    description:
+      'Large operators placing relevant commodities on the EU market must submit EUDR due diligence statements and ensure traceability back to plot of land.',
+    organizationTypes: [
+      'EU and non-EU companies importing or exporting cattle, cocoa, coffee, oil palm, rubber, soy or wood products at large-enterprise scale'
+    ],
+    type: 'Compliance deadline'
+  },
+  {
+    id: 'eudr-sme-2026',
+    regulation: 'EU Deforestation Regulation (EUDR)',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2026-06-30',
+    startDate: '2025-12-31',
+    endDate: '2026-06-30',
+    milestone: 'SME operators transition into scope following deferral',
+    description:
+      'Small and medium-sized operators benefit from a short deferral but must comply with EUDR due diligence obligations from mid-2026.',
+    organizationTypes: [
+      'SME operators and traders of in-scope forest and agricultural commodities targeting the EU market'
+    ],
+    type: 'Compliance deadline'
+  },
+  {
+    id: 'eu-taxonomy-2025',
+    regulation: 'EU Taxonomy Regulation',
+    region: 'eu',
+    jurisdiction: 'European Union',
+    date: '2025-01-01',
+    startDate: '2024-01-01',
+    endDate: '2025-12-31',
+    milestone: 'Reporting on all six environmental objectives becomes mandatory',
+    description:
+      'Disclosures must cover taxonomy alignment for climate, water, circular economy, pollution prevention and biodiversity objectives for FY2024 reporting.',
+    organizationTypes: [
+      'Companies subject to CSRD reporting',
+      'Financial market participants making SFDR product disclosures'
+    ],
+    type: 'Disclosure expansion'
+  },
+  {
+    id: 'sec-climate-laf-2026',
+    regulation: 'US SEC Climate Disclosure Rule',
+    region: 'us',
+    jurisdiction: 'United States',
+    date: '2026-05-31',
+    startDate: '2025-01-01',
+    endDate: '2026-05-31',
+    milestone: 'Large accelerated filers submit first climate disclosures (FY2025)',
+    description:
+      'Large accelerated filers must include climate-related disclosures, financial statement footnotes and Scope 1 & 2 emissions in 2026 Form 10-K filings.',
+    organizationTypes: [
+      'US registrants classified as large accelerated filers (public float ≥ $700M)',
+      'Foreign private issuers meeting large accelerated filer thresholds'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'sec-climate-af-2027',
+    regulation: 'US SEC Climate Disclosure Rule',
+    region: 'us',
+    jurisdiction: 'United States',
+    date: '2027-05-31',
+    startDate: '2026-01-01',
+    endDate: '2027-05-31',
+    milestone: 'Accelerated filers file first climate disclosures (FY2026)',
+    description:
+      'Accelerated filers must follow with climate-related disclosures, including Scope 1 & 2 emissions, in 2027 periodic filings.',
+    organizationTypes: [
+      'US registrants classified as accelerated filers (public float $75M–$700M)',
+      'Foreign private issuers that are accelerated filers'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'ca-sb253-scope12-2026',
+    regulation: 'California Climate Corporate Data Accountability Act (SB 253)',
+    region: 'us',
+    jurisdiction: 'California, United States',
+    date: '2026-01-01',
+    startDate: '2025-01-01',
+    endDate: '2026-01-01',
+    milestone: 'Scope 1 and 2 emissions reporting begins',
+    description:
+      'Covered entities must start reporting Scope 1 and Scope 2 emissions for FY2025 to the California Air Resources Board starting in 2026.',
+    organizationTypes: [
+      'Public and private companies doing business in California with >$1B global revenue'
+    ],
+    type: 'Reporting start'
+  },
+  {
+    id: 'ca-sb253-scope3-2027',
+    regulation: 'California Climate Corporate Data Accountability Act (SB 253)',
+    region: 'us',
+    jurisdiction: 'California, United States',
+    date: '2027-01-01',
+    startDate: '2026-01-01',
+    endDate: '2027-01-01',
+    milestone: 'Scope 3 emissions attestation window opens',
+    description:
+      'Covered entities expand reporting to include Scope 3 emissions with phased assurance requirements beginning in 2027.',
+    organizationTypes: [
+      'Public and private companies doing business in California with >$1B global revenue'
+    ],
+    type: 'Reporting expansion'
+  },
+  {
+    id: 'ca-sb261-2026',
+    regulation: 'California Climate-Related Financial Risk Act (SB 261)',
+    region: 'us',
+    jurisdiction: 'California, United States',
+    date: '2026-01-01',
+    startDate: '2025-01-01',
+    endDate: '2026-01-01',
+    milestone: 'First biennial climate-risk report due',
+    description:
+      'Large entities must publish a climate-related financial risk report aligned with TCFD recommendations and mitigation actions.',
+    organizationTypes: [
+      'Companies doing business in California with >$500M global revenue (excluding insurers)'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'au-climate-group1-2025',
+    regulation: 'Australian Climate-related Financial Disclosure Regime',
+    region: 'asia',
+    jurisdiction: 'Australia',
+    date: '2025-10-31',
+    startDate: '2024-07-01',
+    endDate: '2025-10-31',
+    milestone: 'Group 1 entities publish first climate disclosures (FY2024-25)',
+    description:
+      'Australia’s largest listed and unlisted entities must provide climate-related financial disclosures aligned to ISSB standards for FY2024-25.',
+    organizationTypes: [
+      'Australian entities with >A$1B consolidated revenue or >$1B assets',
+      'Large financial institutions regulated by APRA'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'au-climate-group2-2027',
+    regulation: 'Australian Climate-related Financial Disclosure Regime',
+    region: 'asia',
+    jurisdiction: 'Australia',
+    date: '2027-10-31',
+    startDate: '2026-07-01',
+    endDate: '2027-10-31',
+    milestone: 'Group 2 entities submit first mandatory climate report',
+    description:
+      'The regime expands to medium-large entities preparing FY2026-27 reports with mandatory disclosure of transition plans and emissions.',
+    organizationTypes: [
+      'Australian entities with A$500M–A$1B revenue or 250–499 employees'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'au-climate-group3-2028',
+    regulation: 'Australian Climate-related Financial Disclosure Regime',
+    region: 'asia',
+    jurisdiction: 'Australia',
+    date: '2028-10-31',
+    startDate: '2027-07-01',
+    endDate: '2028-10-31',
+    milestone: 'Group 3 entities come into scope for FY2027-28 reports',
+    description:
+      'Smaller but still significant entities must provide climate disclosures, extending coverage across the Australian economy.',
+    organizationTypes: [
+      'Australian entities with A$50M–A$500M revenue and 100–499 employees',
+      'Commonwealth public sector entities meeting the Group 3 thresholds'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'sgx-climate-2026',
+    regulation: 'Singapore SGX Climate Reporting',
+    region: 'asia',
+    jurisdiction: 'Singapore',
+    date: '2026-05-31',
+    startDate: '2025-01-01',
+    endDate: '2026-05-31',
+    milestone: 'Mandatory climate reporting for priority sectors',
+    description:
+      'SGX-listed issuers in finance, agriculture, energy, and transportation must publish climate-related disclosures aligned with TCFD for FY2025.',
+    organizationTypes: [
+      'SGX-listed issuers in priority industries',
+      'Large Singapore-based financial institutions'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'japan-prime-2025',
+    regulation: 'Japan FSA Sustainability Disclosure Guidance',
+    region: 'asia',
+    jurisdiction: 'Japan',
+    date: '2025-06-30',
+    startDate: '2024-04-01',
+    endDate: '2025-06-30',
+    milestone: 'Prime Market issuers deliver enhanced sustainability reporting',
+    description:
+      'Tokyo Stock Exchange Prime Market companies must include enhanced climate and sustainability disclosures in annual securities reports from FY2024.',
+    organizationTypes: [
+      'Tokyo Stock Exchange Prime Market listed companies'
+    ],
+    type: 'Reporting deadline'
+  },
+  {
+    id: 'india-brsr-2027',
+    regulation: 'India BRSR Core',
+    region: 'asia',
+    jurisdiction: 'India',
+    date: '2027-07-31',
+    startDate: '2026-04-01',
+    endDate: '2027-07-31',
+    milestone: 'Group 2 listed entities submit first reasonable-assurance BRSR Core',
+    description:
+      'The Securities and Exchange Board of India phases in the BRSR Core assurance requirement, extending to the next 250 listed entities by FY2026-27.',
+    organizationTypes: [
+      'India’s top 501-750 listed entities by market capitalisation',
+      'Large Indian companies preparing sustainability filings for SEBI'
+    ],
+    type: 'Assurance deadline'
+  }
+];
+
+const timelineRegionLabels = {
+  '': 'All regions',
+  eu: 'European Union',
+  us: 'United States',
+  asia: 'Asia-Pacific'
+};
+
+let currentTimelineView = 'calendar';
+
 function setupTimelineDeadlines() {
   const viewBtns = document.querySelectorAll('.timeline-view');
+   currentTimelineView = view;
   viewBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       viewBtns.forEach(b => b.classList.remove('active'));
@@ -2253,113 +2564,312 @@ function setupTimelineDeadlines() {
     });
   });
   
+  const regionSelect = document.getElementById('timelineRegion');
+  const yearSelect = document.getElementById('timelineYear');
+
+  const handleFilterChange = () => updateTimelineView(currentTimelineView);
+
+  if (regionSelect) {
+    regionSelect.addEventListener('change', handleFilterChange);
+  }
+
+  if (yearSelect) {
+    yearSelect.addEventListener('change', handleFilterChange);
+  }
+
+  const activeBtn = document.querySelector('.timeline-view.active');
+  if (activeBtn) {
+    currentTimelineView = activeBtn.getAttribute('data-view');
+  }
+
+
   initializeTimeline();
 }
 
 function initializeTimeline() {
-  updateTimelineView('calendar');
+  updateTimelineView(currentTimelineView);
 }
 
 function updateTimelineView(view) {
   const container = document.getElementById('timelineContainer');
   if (!container) return;
   
+  const filters = getTimelineFilters();
+  const events = filterTimelineEvents(filters);
+
+
   if (view === 'calendar') {
-    displayCalendarView(container);
+     displayCalendarView(container, events, filters);
   } else if (view === 'timeline') {
-    displayTimelineView(container);
+    displayTimelineView(container, events, filters);
   } else if (view === 'gantt') {
-    displayGanttView(container);
+    displayGanttView(container, events, filters);
   }
 }
-
-function displayCalendarView(container) {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  
-  let calendarHTML = `
-    <div class="calendar-header-row">
-      <h3>${monthNames[month]} ${year}</h3>
-    </div>
-    <div class="calendar-grid">
-      <div class="calendar-header">Sun</div>
-      <div class="calendar-header">Mon</div>
-      <div class="calendar-header">Tue</div>
-      <div class="calendar-header">Wed</div>
-      <div class="calendar-header">Thu</div>
-      <div class="calendar-header">Fri</div>
-      <div class="calendar-header">Sat</div>
-  `;
-  
-  // Empty cells for days before the first day
-  for (let i = 0; i < firstDay; i++) {
-    calendarHTML += '<div class="calendar-day empty"></div>';
-  }
-  
-  // Days of the month
-  const deadlineDays = [15, 30]; // Sample deadline days
-  for (let day = 1; day <= daysInMonth; day++) {
-    const hasDeadline = deadlineDays.includes(day);
-    const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-    const classes = `calendar-day ${hasDeadline ? 'has-deadline' : ''} ${isToday ? 'today' : ''}`;
-    calendarHTML += `<div class="${classes}">${day}</div>`;
-  }
-  
-  calendarHTML += '</div>';
-  container.innerHTML = calendarHTML;
-}
-
-function displayTimelineView(container) {
-  const upcomingDeadlines = [
-    { date: '2025-04-30', regulation: 'CSRD', description: 'Large companies first reporting' },
-    { date: '2025-12-31', regulation: 'EUDR', description: 'Large companies compliance (delayed)' },
-    { date: '2026-01-01', regulation: 'California SB253', description: 'Scope 1&2 reporting begins' },
-    { date: '2026-06-30', regulation: 'EUDR', description: 'SMEs compliance' },
-    { date: '2027-01-01', regulation: 'California SB253', description: 'Scope 3 reporting begins' }
+function displayCalendarView(container, events, filters) {
+  const summary = createTimelineSummary(filters, events.length);
+  const selectedYear = parseInt(filters.year, 10) || new Date().getFullYear();
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
+
+  const eventsWithDates = events.filter(event => event.date && new Date(event.date).getFullYear() === selectedYear);
+  const undatedEvents = events.filter(event => !event.date || new Date(event.date).getFullYear() !== selectedYear);
+
+  if (eventsWithDates.length === 0) {
+    container.innerHTML = `
+      ${summary}
+      <div class="timeline-empty">No dated milestones for the selected filters. Adjust the region or year to explore other timelines.</div>
+    `;
+    return;
+  }
   
-  container.innerHTML = `
-    <div class="timeline-list">
-      ${upcomingDeadlines.map(deadline => `
+  const groupedByMonth = eventsWithDates.reduce((acc, event) => {
+    const eventDate = new Date(event.date);
+    const month = eventDate.getMonth();
+    if (!acc[month]) {
+      acc[month] = [];
+    }
+    acc[month].push(event);
+    return acc;
+  }, {});
+
+  const months = Object.keys(groupedByMonth)
+    .map(m => parseInt(m, 10))
+    .sort((a, b) => a - b);
+
+  const today = new Date();
+
+  const monthCalendars = months
+    .map(month => {
+      const daysInMonth = new Date(selectedYear, month + 1, 0).getDate();
+      const firstDay = new Date(selectedYear, month, 1).getDay();
+      const eventsInMonth = groupedByMonth[month];
+
+      let monthHTML = `
+        <div class="calendar-month">
+          <div class="calendar-month-header">
+            <h3>${monthNames[month]} ${selectedYear}</h3>
+            <span>${eventsInMonth.length} milestone${eventsInMonth.length === 1 ? '' : 's'}</span>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-header">Sun</div>
+            <div class="calendar-header">Mon</div>
+            <div class="calendar-header">Tue</div>
+            <div class="calendar-header">Wed</div>
+            <div class="calendar-header">Thu</div>
+            <div class="calendar-header">Fri</div>
+            <div class="calendar-header">Sat</div>
+      `;
+
+      for (let i = 0; i < firstDay; i++) {
+        monthHTML += '<div class="calendar-day empty"></div>';
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayEvents = eventsInMonth.filter(event => new Date(event.date).getDate() === day);
+        const hasDeadline = dayEvents.length > 0;
+        const isToday =
+          day === today.getDate() &&
+          month === today.getMonth() &&
+          selectedYear === today.getFullYear();
+        const classes = `calendar-day ${hasDeadline ? 'has-deadline' : ''} ${isToday ? 'today' : ''}`;
+        const eventsHTML = dayEvents
+          .map(event => `
+            <div class="calendar-event">
+              <strong>${event.regulation}</strong>
+              <span>${event.milestone}</span>
+              <span class="calendar-applicability">Applicable to: ${event.organizationTypes.join('; ')}</span>
+            </div>
+          `)
+          .join('');
+
+        monthHTML += `
+          <div class="${classes}">
+            <div class="calendar-day-number">${day}</div>
+            <div class="calendar-events">${eventsHTML}</div>
+          </div>
+        `;
+      }
+
+      monthHTML += '</div></div>';
+      return monthHTML;
+    })
+    .join('');
+
+  const undatedHTML = undatedEvents.length
+    ? `
+      <div class="timeline-undated">
+        <h4>Milestones spanning ${filters.year}</h4>
+        <ul>
+          ${undatedEvents
+            .map(event => `
+              <li>
+                <strong>${event.regulation}</strong>: ${event.milestone} (${event.organizationTypes.join(', ')})
+              </li>
+            `)
+            .join('')}
+        </ul>
+      </div>
+    `
+    : '';
+
+  container.innerHTML = `${summary}${monthCalendars}${undatedHTML}`;
+}
+
+}
+function displayTimelineView(container, events, filters) {
+  const summary = createTimelineSummary(filters, events.length);
+
+  if (!events.length) {
+    container.innerHTML = `
+      ${summary}
+      <div class="timeline-empty">No milestones for the selected filters. Try a different region or year.</div>
+    `;
+    return;
+  }
+
+  const timelineItems = events
+    .map(event => {
+      const eventDate = event.date ? new Date(event.date) : null;
+      const formattedDate = eventDate ? formatTimelineDate(eventDate) : 'Date TBC';
+      const regionLabel = event.jurisdiction || timelineRegionLabels[event.region] || 'Global';
+
+      return ``
         <div class="timeline-item">
-          <div class="timeline-date">${new Date(deadline.date).toLocaleDateString()}</div>
+          <div class="timeline-date">
+            <span class="timeline-date-primary">${formattedDate}</span>
+            <span class="timeline-region">${regionLabel}</span>
+          </div>
           <div class="timeline-content">
-            <h4>${deadline.regulation}</h4>
-            <p>${deadline.description}</p>
+           <h4>${event.regulation}</h4>
+            <p class="timeline-milestone">${event.milestone}</p>
+            <p>${event.description}</p>
+            <p class="timeline-applicability"><strong>Applicability:</strong> ${event.organizationTypes.join('; ')}</p>
+            <span class="timeline-chip">${event.type}</span>
           </div>
         </div>
-      `).join('')}
-    </div>
-  `;
+         `;
+    })
+    .join('');
+
+  container.innerHTML = `${summary}<div class="timeline-list">${timelineItems}</div>`;
 }
 
-function displayGanttView(container) {
-  container.innerHTML = `
-    <div class="gantt-placeholder">
-      <h3>Gantt Chart View</h3>
-      <p>Interactive Gantt chart showing regulatory timelines and dependencies would be displayed here.</p>
-      <div class="gantt-sample">
+function displayGanttView(container, events, filters) {
+  const summary = createTimelineSummary(filters, events.length);
+
+  if (!events.length) {
+    container.innerHTML = `
+      ${summary}
+      <div class="timeline-empty">No timeline segments to plot for the selected filters.</div>
+    `;
+    return;
+  }
+
+  const sortedEvents = [...events].sort((a, b) => {
+    const startA = new Date(a.startDate || a.date);
+    const startB = new Date(b.startDate || b.date);
+    return startA - startB;
+  });
+
+  const startTimes = sortedEvents.map(event => new Date(event.startDate || event.date));
+  const endTimes = sortedEvents.map(event => new Date(event.endDate || event.date));
+  const minStart = new Date(Math.min(...startTimes));
+  const maxEnd = new Date(Math.max(...endTimes));
+  const totalDuration = Math.max(maxEnd.getTime() - minStart.getTime(), 1);
+
+  const rows = sortedEvents
+    .map(event => {
+      const start = new Date(event.startDate || event.date);
+      const end = new Date(event.endDate || event.date);
+      const startOffset = ((start.getTime() - minStart.getTime()) / totalDuration) * 100;
+      const width = Math.max(((end.getTime() - start.getTime()) / totalDuration) * 100, 2);
+
+      return `
         <div class="gantt-row">
-          <div class="gantt-label">CSRD Implementation</div>
-          <div class="gantt-bar csrd" style="width: 60%; margin-left: 10%;"></div>
-        </div>
-        <div class="gantt-row">
-          <div class="gantt-label">EUDR Compliance</div>
-          <div class="gantt-bar eudr" style="width: 40%; margin-left: 30%;"></div>
+          <div class="gantt-label">
+            <strong>${event.regulation}</strong>
+            <span>${event.milestone}</span>
+            <span class="gantt-applicability">Applies to: ${event.organizationTypes.join('; ')}</span>
+          </div>
+          <div class="gantt-track">
+            <div class="gantt-bar ${event.region}" style="margin-left:${startOffset}%; width:${width}%;"></div>
+            <div class="gantt-dates">${formatTimelineDate(start)} – ${formatTimelineDate(end)}</div>
+          </div>
         </div>
         <div class="gantt-row">
           <div class="gantt-label">California SB253</div>
           <div class="gantt-bar ca-sb253" style="width: 50%; margin-left: 50%;"></div>
         </div>
       </div>
-    </div>
-  `;
+        `;
+    })
+    .join('');
+
+  container.innerHTML = `${summary}<div class="gantt-chart">${rows}</div>`;
 }
+
+function getTimelineFilters() {
+  const regionSelect = document.getElementById('timelineRegion');
+  const yearSelect = document.getElementById('timelineYear');
+
+  const region = regionSelect ? regionSelect.value : '';
+  const year = yearSelect ? yearSelect.value : new Date().getFullYear().toString();
+
+  return { region, year };
+}
+
+function filterTimelineEvents(filters) {
+  const selectedYear = parseInt(filters.year, 10);
+
+  return timelineEvents
+    .filter(event => {
+      const regionMatch = !filters.region || event.region === filters.region;
+
+      const start = new Date(event.startDate || event.date);
+      const end = new Date(event.endDate || event.date);
+      const hasDate = !!event.date;
+      const dateYear = hasDate ? new Date(event.date).getFullYear() : null;
+
+      const yearMatch = Number.isNaN(selectedYear)
+        ? true
+        : (hasDate && dateYear === selectedYear) ||
+          (selectedYear >= start.getFullYear() && selectedYear <= end.getFullYear());
+
+      return regionMatch && yearMatch;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date || a.startDate);
+      const dateB = new Date(b.date || b.startDate);
+      return dateA - dateB;
+    });
+}
+
+function createTimelineSummary(filters, count) {
+  const regionLabel = timelineRegionLabels[filters.region] || timelineRegionLabels[''];
+  const summaryYear = filters.year || new Date().getFullYear();
+  return `
+    <div class="timeline-summary">
+      Showing <strong>${count}</strong> milestone${count === 1 ? '' : 's'} for <span>${regionLabel}</span> in <span>${summaryYear}</span>
+  `</div>
+    ;
+}
+function formatTimelineDate(date) {
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
 
 // Comparison Tool
 function setupComparisonTool() {
