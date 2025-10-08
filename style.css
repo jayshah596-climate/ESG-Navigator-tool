@@ -1174,6 +1174,16 @@ select.form-control {
   font-size: var(--font-size-sm);
 }
 
+.regulation-region {
+  display: inline-block;
+  margin-top: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+
 .regulation-status {
   padding: var(--space-4) var(--space-8);
   border-radius: var(--radius-full);
