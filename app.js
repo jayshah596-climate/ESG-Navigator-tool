@@ -14,7 +14,7 @@ const regulationsData = {
     "european-union": {
       name: "European Union",
       flag: "🇪🇺",
-      count: 8,
+      count: 7,
       regulations: [
         {
           id: "csrd",
@@ -115,6 +115,108 @@ const regulationsData = {
             "Update procedures"
           ],
           penalties: "Up to 4% of EU turnover, product confiscation"
+              },
+        {
+          id: "ch-climate",
+          name: "Swiss Climate and Environmental Reporting Ordinance",
+          acronym: "CH-CLIMATE",
+          authority: "Swiss Federal Council",
+          status: "Mandatory",
+          topics: ["Climate", "Environment", "Governance"],
+          applicability: [
+            "Swiss public-interest companies with >500 employees",
+            "Entities with >CHF 20 million total assets or >CHF 40 million revenue",
+            "Large financial institutions supervised by FINMA"
+          ],
+          timeline: "Applicable to reporting periods beginning on or after 1 January 2024 with first reports due in 2025",
+          officialLink: "https://www.admin.ch/opc/en/classified-compilation/20212619/index.html",
+          dataRequired: [
+            "Governance and board oversight of climate matters",
+            "Climate strategy including transition plan and interim targets",
+            "Processes for identifying and managing climate and environmental risks",
+            "Quantitative metrics covering Scope 1,2,3 emissions and financing exposures"
+          ],
+          complianceSteps: [
+            "Confirm qualification as a public-interest entity under Swiss Code of Obligations",
+            "Assign board-level responsibility for climate reporting and approvals",
+            "Develop climate strategy aligned to net-zero commitments and Swiss targets",
+            "Map key transition and physical risks impacting operations and financing",
+            "Establish methodologies for Scope 1,2,3 emissions and financed emissions where relevant",
+            "Integrate climate considerations into risk management frameworks and internal controls",
+            "Draft disclosures covering governance, strategy, risk management, metrics and targets",
+            "Coordinate with auditors to align financial statement cross-references",
+            "Publish climate report alongside management report in an electronic format",
+            "Monitor Federal Council guidance and prepare for assurance requirements"
+          ],
+          penalties: "Non-compliance subject to Swiss Code of Obligations fines up to CHF 100,000 for responsible persons"
+        },
+        {
+          id: "no-trans",
+          name: "Norwegian Transparency Act",
+          acronym: "NO-TRANS",
+          authority: "Norwegian Ministry of Children and Families",
+          status: "Mandatory",
+          topics: ["Social", "Governance"],
+          applicability: [
+            "Large enterprises registered in Norway meeting two of: NOK 70m revenue, NOK 35m balance sheet, 50 employees",
+            "Large foreign companies offering goods or services in Norway",
+            "State-owned enterprises meeting threshold criteria"
+          ],
+          timeline: "In force from 1 July 2022 with annual due diligence statement due by 30 June",
+          officialLink: "https://lovdata.no/dokument/NLE/lov/2021-06-18-99",
+          dataRequired: [
+            "Policies and governance for human rights and decent working conditions",
+            "Due diligence assessments covering own operations and supply chains",
+            "Measures taken to cease, prevent or mitigate adverse impacts",
+            "Results of due diligence and planned improvements including grievance mechanisms"
+          ],
+          complianceSteps: [
+            "Assess whether the enterprise meets Norwegian Transparency Act thresholds",
+            "Adopt governance policies covering human rights and decent work expectations",
+            "Map value chain entities and prioritise salient human rights risks",
+            "Conduct due diligence in accordance with OECD Guidelines and document findings",
+            "Integrate mitigation actions and follow-up processes into procurement and operations",
+            "Establish grievance mechanisms and stakeholder engagement channels",
+            "Prepare the annual transparency statement covering actions and outcomes",
+            "Publish statement in Norwegian and English on company website by 30 June",
+            "Respond to information requests from the Norwegian Consumer Authority",
+            "Review and update due diligence programme annually"
+          ],
+          penalties: "Norwegian Consumer Authority and Market Council may impose orders and coercive fines for non-compliance"
+        },
+        {
+          id: "fr-art29",
+          name: "French Article 29 Energy Transition Law Disclosure",
+          acronym: "FR-ART29",
+          authority: "French Ministry of the Economy, Finance and Industrial and Digital Sovereignty",
+          status: "Mandatory",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "French asset management companies and institutional investors",
+            "Financial institutions offering portfolio management services in France",
+            "Insurers and pension funds governed by the French Monetary and Financial Code"
+          ],
+          timeline: "Effective for financial years ending on or after 31 December 2021 with annual reporting thereafter",
+          officialLink: "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000043884874",
+          dataRequired: [
+            "Climate strategy alignment with Paris Agreement and low-carbon transition scenarios",
+            "Exposure to physical and transition climate risks including temperature scenarios",
+            "Investment policies on biodiversity, coal, fossil fuels and just transition",
+            "ESG due diligence, engagement outcomes and taxonomy alignment indicators"
+          ],
+          complianceSteps: [
+            "Determine scope of financial products and portfolios subject to Article 29",
+            "Gather climate and biodiversity data for holdings across asset classes",
+            "Assess portfolio alignment with 1.5°C or well-below 2°C scenarios",
+            "Measure exposure to sectors with significant transition risk including fossil fuels",
+            "Document strategies for biodiversity protection and phasing out coal",
+            "Describe engagement, voting and stewardship actions supporting transition",
+            "Report sustainable investment share and EU Taxonomy alignment metrics",
+            "Publish transition plans, targets and methodologies on public website",
+            "Submit annual disclosure to the Autorité des marchés financiers when requested",
+            "Review data quality and update methodologies in line with French decree guidance"
+          ],
+          penalties: "AMF supervisory actions including formal notices, injunctions and financial penalties"
         }
       ]
     },
@@ -255,7 +357,7 @@ const regulationsData = {
     "north-america": {
       name: "North America",
       flag: "🌎",
-      count: 5,
+      count: 4,
       regulations: [
         {
           id: "sec-climate",
@@ -306,13 +408,81 @@ const regulationsData = {
             "Monitor CARB guidance"
           ],
           penalties: "Up to $500,000 per year"
+            },
+        {
+          id: "ca-ifrs-s",
+          name: "Canadian IFRS Sustainability Disclosure Standards",
+          acronym: "CA-IFRS-S",
+          authority: "Canadian Sustainability Standards Board",
+          status: "Mandatory (pending final endorsement)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "Public companies reporting under Canadian securities regulation",
+            "Domestic issuers applying IFRS Accounting Standards",
+            "Large private enterprises voluntarily adopting sustainability disclosure standards"
+          ],
+          timeline: "Exposure drafts released March 2024 with final standards targeted for 2025 reporting periods",
+          officialLink: "https://www.cssb-bncdd.ca/standards/",
+          dataRequired: [
+            "Material sustainability-related risks and opportunities",
+            "Governance structure overseeing sustainability matters",
+            "Strategy resilience and scenario analysis for climate risks",
+            "Metrics and targets aligned with IFRS S1 and IFRS S2 guidance"
+          ],
+          complianceSteps: [
+            "Monitor CSSB adoption timeline and provincial securities requirements",
+            "Conduct readiness assessment against IFRS S1/S2 disclosure requirements",
+            "Establish governance and control systems for sustainability data",
+            "Map material sustainability topics to available metrics and targets",
+            "Develop climate scenario analysis and emissions inventories",
+            "Integrate sustainability information with financial reporting processes",
+            "Engage external auditors on assurance expectations",
+            "Prepare management commentary and note disclosures",
+            "Align investor communications with CSSB standards",
+            "Update disclosures as CSSB issues final amendments and guidance"
+          ],
+          penalties: "Enforced through Canadian securities regulators including cease trade orders and monetary penalties"
+        },
+        {
+          id: "bmv-esg",
+          name: "Bolsa Mexicana de Valores ESG Disclosure Guidance",
+          acronym: "BMV-ESG",
+          authority: "Bolsa Mexicana de Valores",
+          status: "Voluntary (Exchange guidance)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "Issuers listed on the Mexican Stock Exchange",
+            "Companies seeking inclusion in BMV sustainability indices",
+            "Potential issuers of sustainable bonds on BMV"
+          ],
+          timeline: "Updated ESG disclosure guide published 2023 with ongoing annual reporting expectations",
+          officialLink: "https://www.bmv.com.mx/en/empresas/esg",
+          dataRequired: [
+            "Governance of sustainability and board responsibilities",
+            "Environmental metrics including emissions, energy and water",
+            "Social performance indicators such as labour practices and diversity",
+            "Economic value creation and community investment disclosures"
+          ],
+          complianceSteps: [
+            "Review BMV ESG disclosure guide and questionnaire requirements",
+            "Assign cross-functional team responsible for ESG data collection",
+            "Identify material sustainability topics aligned to investor expectations",
+            "Compile quantitative metrics and qualitative narratives for each ESG pillar",
+            "Align reporting with international frameworks such as GRI and TCFD",
+            "Validate data accuracy through internal controls or external assurance",
+            "Submit ESG questionnaire to BMV sustainability platform",
+            "Publish ESG report or integrated report on corporate website",
+            "Engage investors and rating agencies on ESG performance",
+            "Update disclosures annually reflecting progress and new targets"
+          ],
+          penalties: "Non-compliance may affect eligibility for BMV sustainability indices and access to sustainable financing"
         }
       ]
     },
     "asia-pacific": {
       name: "Asia-Pacific",
       flag: "🌏",
-      count: 15,
+      count: 16,
       regulations: [
         {
           id: "brsr-india",
@@ -543,6 +713,40 @@ const regulationsData = {
           ],
           penalties: "SGX regulatory actions including public reprimand and potential suspension"
         },
+                {
+          id: "csrc-esg",
+          name: "CSRC ESG Disclosure Guidance for Listed Companies",
+          acronym: "CSRC-ESG",
+          authority: "China Securities Regulatory Commission",
+          status: "Mandatory (phased supervisory guidance)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "Companies listed on Shanghai and Shenzhen stock exchanges",
+            "Domestic and overseas-listed Chinese companies filing annual reports with CSRC",
+            "Financial institutions with CSRC-regulated listings"
+          ],
+          timeline: "Guidance issued 2022-2023 with enhanced ESG disclosure requirements for 2024 annual reports",
+          officialLink: "http://www.csrc.gov.cn/csrc_en/c101912/c2400844/content.shtml",
+          dataRequired: [
+            "Board oversight of ESG strategy and risk management",
+            "Material environmental metrics including emissions, energy and resource efficiency",
+            "Social responsibility indicators covering labour, supply chain and community impacts",
+            "Governance practices, anti-corruption controls and stakeholder engagement outcomes"
+          ],
+          complianceSteps: [
+            "Review CSRC guidance and relevant stock exchange self-regulatory rules",
+            "Establish ESG governance structure with board committee oversight",
+            "Perform materiality assessment aligned with national sustainability priorities",
+            "Develop data collection systems for environmental, social and governance metrics",
+            "Integrate climate risk analysis and transition planning into corporate strategy",
+            "Document policies for supply chain responsibility and anti-corruption",
+            "Prepare ESG narrative and quantitative disclosures for annual and interim reports",
+            "Coordinate bilingual reporting and digital submission to CSRC",
+            "Engage external assurance or internal audit to review key metrics",
+            "Respond to CSRC and exchange feedback and update disclosures annually"
+          ],
+          penalties: "CSRC supervisory measures including rectification orders, public notices and potential delisting procedures"
+        },
         {
           id: "k-esg",
           name: "Korea ESG Disclosure Standards",
@@ -634,6 +838,108 @@ const regulationsData = {
             "Monitor climate developments"
           ],
           penalties: "Varies by jurisdiction"
+             },
+        {
+          id: "tcfd",
+          name: "Task Force on Climate-related Financial Disclosures Recommendations",
+          acronym: "TCFD",
+          authority: "Financial Stability Board Task Force on Climate-related Financial Disclosures",
+          status: "Voluntary (Adopted as mandatory framework in multiple jurisdictions)",
+          topics: ["Climate"],
+          applicability: [
+            "Companies with material climate-related financial risks",
+            "Financial institutions and asset owners",
+            "Listed issuers seeking investor-aligned reporting"
+          ],
+          timeline: "Initial recommendations released June 2017 with 2021 updated guidance",
+          officialLink: "https://www.fsb-tcfd.org/publications/",
+          dataRequired: [
+            "Board and management oversight of climate topics",
+            "Climate impacts on business model and strategy",
+            "Processes for identifying, assessing and managing climate risks",
+            "Metrics and targets including Scope 1,2,3 emissions where material"
+          ],
+          complianceSteps: [
+            "Confirm applicability based on investor and regulatory expectations",
+            "Define governance roles for climate oversight",
+            "Identify material transition and physical climate risks",
+            "Undertake scenario analysis aligned to TCFD guidance",
+            "Integrate climate factors into enterprise risk management",
+            "Quantify Scope 1,2,3 emissions and relevant metrics",
+            "Set science-aligned climate targets and transition plans",
+            "Embed climate considerations into strategic planning and capital allocation",
+            "Prepare disclosures structured around governance, strategy, risk management, metrics and targets",
+            "Review annually and update based on evolving FSB/ISSB guidance"
+          ],
+          penalties: "None directly; enforcement handled through adopting market regulations"
+        },
+        {
+          id: "gri-standards",
+          name: "GRI Sustainability Reporting Standards",
+          acronym: "GRI",
+          authority: "Global Reporting Initiative",
+          status: "Voluntary (Widely adopted global disclosure framework)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "Organizations reporting on sustainability impacts",
+            "Large enterprises with stakeholder reporting commitments",
+            "Supply chain partners responding to ESG information requests"
+          ],
+          timeline: "Universal Standards 2021 effective for reports published on or after 1 January 2023",
+          officialLink: "https://www.globalreporting.org/how-to-use-the-gri-standards/gri-standards-english-language/",
+          dataRequired: [
+            "Disclosure of material topics and impact boundaries",
+            "Management approach for each material topic",
+            "Topic-specific metrics across economic, environmental and social themes",
+            "Stakeholder engagement and due diligence processes"
+          ],
+          complianceSteps: [
+            "Confirm organizational commitment to use GRI Standards",
+            "Establish governance for sustainability reporting and assurance",
+            "Conduct double materiality or impact assessments to determine topics",
+            "Map operations and value chain boundaries for each material topic",
+            "Gather qualitative and quantitative data aligned to Universal and Topic Standards",
+            "Document management approach disclosures for each topic",
+            "Integrate human rights and due diligence disclosures per GRI 2 and GRI 3",
+            "Prepare the content index referencing relevant GRI disclosures",
+            "Subject report to internal review and optional external assurance",
+            "Publish statement of use and monitor updates from the GRI Standards Division"
+          ],
+          penalties: "None; credibility relies on transparency and assurance practices"
+        },
+        {
+          id: "sasb-standards",
+          name: "SASB Sustainability Accounting Standards",
+          acronym: "SASB",
+          authority: "International Sustainability Standards Board (formerly Value Reporting Foundation)",
+          status: "Voluntary (Investor-focused standards used in capital markets)",
+          topics: ["Climate", "Environment", "Social", "Governance"],
+          applicability: [
+            "Public and private companies seeking industry-specific ESG metrics",
+            "Issuers communicating financially material sustainability topics",
+            "Investors assessing ESG performance across 77 industries"
+          ],
+          timeline: "Industry standards issued 2018; maintained by ISSB with ongoing updates",
+          officialLink: "https://www.ifrs.org/issued-standards/sasb-standards/",
+          dataRequired: [
+            "Industry-specific sustainability disclosure topics",
+            "Quantitative metrics and accounting metrics for each topic",
+            "Narrative discussion of risk management and policies",
+            "Activity metrics enabling normalization of performance"
+          ],
+          complianceSteps: [
+            "Identify applicable SASB industry or industries for the organization",
+            "Determine financially material sustainability topics for investors",
+            "Evaluate existing data coverage against SASB metrics and technical protocols",
+            "Establish governance and internal controls for data collection",
+            "Develop processes to capture quantitative and qualitative metrics",
+            "Integrate SASB topics into MD&A, investor presentations, or sustainability reports",
+            "Align disclosures with complementary frameworks such as TCFD and IFRS S1/S2",
+            "Engage assurance providers or internal audit for data validation",
+            "Solicit investor feedback on clarity and decision-usefulness",
+            "Monitor ISSB updates and industry guidance for revisions"
+          ],
+          penalties: "None; investor expectations and exchange requirements drive adoption"
         }
       ]
     },
