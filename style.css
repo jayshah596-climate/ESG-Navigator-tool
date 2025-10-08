@@ -1509,6 +1509,68 @@ select.form-control {
   margin-bottom: var(--space-4);
 }
 
+.requirement-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.requirement-description {
+  margin-top: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.requirement-tags {
+  margin-top: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  background: rgba(148, 163, 184, 0.16);
+  color: var(--color-text);
+}
+
+.tag--type {
+  background: rgba(59, 130, 246, 0.16);
+  color: #1d4ed8;
+}
+
+.tag--climate {
+  background: rgba(14, 116, 144, 0.18);
+  color: #0f766e;
+}
+
+.tag--environment {
+  background: rgba(101, 163, 13, 0.18);
+  color: #3f6212;
+}
+
+.tag--social {
+  background: rgba(219, 39, 119, 0.18);
+  color: #be185d;
+}
+
+.tag--governance {
+  background: rgba(99, 102, 241, 0.18);
+  color: #3730a3;
+}
+
+.matrix-empty {
+  padding: var(--space-24);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+
 .required {
   color: var(--color-error);
   font-weight: var(--font-weight-medium);
