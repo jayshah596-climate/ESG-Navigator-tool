@@ -352,7 +352,7 @@ const regulationsData = {
             "Systemically important NBFCs regulated by RBI"
           ],
           timeline: "Board-approved implementation plans by October 2022; integrate climate risk management from FY 2023-24",
-          officialLink: "https://rbidocs.rbi.org.in/rdocs/PublicationReport/Pdfs/DP27072022CRSF.PDF",
+          officialLink: "https://www.rbi.org.in/Scripts/PublicationReportDetails.aspx?UrlPage=&ID=1196",
           dataRequired: [
             "Climate risk governance structures",
             "Assessment of physical and transition risks",
