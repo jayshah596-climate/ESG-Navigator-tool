@@ -1794,12 +1794,14 @@ function generateComplianceRoadmap() {
   const roadmap = createRoadmap(selectedRegs, timeline, priority);
   displayRoadmap(roadmap);
 }
-
+let currentRoadmapPlan = null;
+let currentDataMatrixView = [];
 function createRoadmap(regulationIds, timelineMonths, priority) {
+  const timelineTotal = parseInt(timelineMonths, 10) || 12;
   const phases = [
     {
       name: "Assessment & Planning",
-      duration: Math.ceil(timelineMonths * 0.15),
+      duration: Math.ceil(timelineTotal * 0.15),
       activities: [
         "Conduct regulatory scope analysis",
         "Assess current state of compliance",
@@ -1810,7 +1812,7 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     },
     {
       name: "Gap Analysis & Design",
-      duration: Math.ceil(timelineMonths * 0.20),
+      duration: Math.ceil(timelineTotal * 0.20),
       activities: [
         "Perform comprehensive gap analysis",
         "Design data collection frameworks",
@@ -1821,7 +1823,7 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     },
     {
       name: "System Implementation",
-      duration: Math.ceil(timelineMonths * 0.25),
+      duration: Math.ceil(timelineTotal * 0.25),
       activities: [
         "Implement data collection systems",
         "Configure reporting tools and dashboards",
@@ -1832,7 +1834,7 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     },
     {
       name: "Data Collection & Testing",
-      duration: Math.ceil(timelineMonths * 0.20),
+      duration: Math.ceil(timelineTotal * 0.20),
       activities: [
         "Begin systematic data collection",
         "Engage suppliers and value chain partners",
@@ -1843,7 +1845,7 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     },
     {
       name: "Reporting & Assurance",
-      duration: Math.ceil(timelineMonths * 0.15),
+      duration: Math.ceil(timelineTotal * 0.15),
       activities: [
         "Prepare comprehensive reports",
         "Engage external assurance providers",
@@ -1854,7 +1856,7 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     },
     {
       name: "Monitoring & Improvement",
-      duration: Math.ceil(timelineMonths * 0.05),
+      duration: Math.ceil(timelineTotal * 0.05),
       activities: [
         "Establish ongoing monitoring processes",
         "Implement continuous improvement framework",
@@ -1865,16 +1867,46 @@ function createRoadmap(regulationIds, timelineMonths, priority) {
     }
   ];
   
-  return phases;
+  const selectedRegulations = regulationIds
+    .map(id => findRegulationById(id))
+    .filter(Boolean)
+    .map(reg => `${reg.name} (${reg.acronym})`);
+
+  const totalDuration = phases.reduce((sum, phase) => sum + phase.duration, 0);
+
+  return {
+    phases,
+    metadata: {
+      priority,
+      timelineMonths: timelineTotal,
+      totalDuration,
+      generatedAt: new Date().toISOString()
+    },
+    regulations: selectedRegulations
+  };
 }
 
-function displayRoadmap(phases) {
+function displayRoadmap(roadmap) {
   const resultsContainer = document.getElementById('roadmapResults');
   
+  if (!roadmap) {
+    resultsContainer.innerHTML = '';
+    currentRoadmapPlan = null;
+    return;
+  }
+
+  const { phases, metadata, regulations } = roadmap;
+  currentRoadmapPlan = roadmap;
+
+  const formattedPriority = metadata.priority
+    .replace('-', ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+
   resultsContainer.innerHTML = `
     <div class="roadmap-header">
       <h3>Your Customized Compliance Roadmap</h3>
-      <p>Total Duration: ${phases.reduce((sum, phase) => sum + phase.duration, 0)} months</p>
+      <p>Total Duration: ${metadata.totalDuration} months • Priority: ${formattedPriority}</p>
+      <p>Selected Regulations: ${regulations.length ? regulations.join(', ') : 'Custom Selection'}</p>
     </div>
     
     <div class="roadmap-timeline">
@@ -1899,11 +1931,106 @@ function displayRoadmap(phases) {
 }
 
 function exportRoadmap() {
-  alert('Roadmap export functionality would be implemented here');
+    if (!currentRoadmapPlan) {
+    alert('Generate a roadmap before exporting.');
+    return;
+  }
+
+  const { phases, metadata, regulations } = currentRoadmapPlan;
+  const formattedPriority = metadata.priority
+    .replace('-', ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+
+  const lines = [];
+  lines.push('Compliance Roadmap Export');
+  lines.push(`Generated: ${new Date(metadata.generatedAt).toLocaleString()}`);
+  lines.push(`Priority Level: ${formattedPriority}`);
+  lines.push(`Planning Horizon: ${metadata.timelineMonths} months`);
+  if (regulations.length) {
+    lines.push('Regulations Covered:');
+    regulations.forEach(reg => lines.push(` - ${reg}`));
+  }
+  lines.push('');
+  lines.push('Phases:');
+
+  phases.forEach((phase, index) => {
+    lines.push(`Phase ${index + 1}: ${phase.name} (${phase.duration} months)`);
+    phase.activities.forEach(activity => {
+      lines.push(`  • ${activity}`);
+    });
+    lines.push('');
+  });
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'compliance-roadmap.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function scheduleRoadmapReview() {
-  alert('Roadmap review scheduling would be implemented here');
+  if (!currentRoadmapPlan) {
+    alert('Generate a roadmap before scheduling a review.');
+    return;
+  }
+
+  const dateInput = prompt('Enter review date (YYYY-MM-DD):');
+  if (!dateInput) return;
+
+  const timeInput = prompt('Enter start time (HH:MM, 24-hour format):', '09:00');
+  if (!timeInput) return;
+
+  const startDateTime = new Date(`${dateInput}T${timeInput}`);
+  if (Number.isNaN(startDateTime.getTime())) {
+    alert('Please provide a valid date and time.');
+    return;
+  }
+
+  const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000);
+
+  const formatForICS = date =>
+    date
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}Z$/, 'Z');
+
+  const { regulations } = currentRoadmapPlan;
+  const descriptionLines = [];
+  if (regulations.length) {
+    descriptionLines.push('Regulations in scope:');
+    regulations.forEach(reg => descriptionLines.push(`- ${reg}`));
+  } else {
+    descriptionLines.push('Roadmap created via ESG Navigator tool.');
+  }
+
+  const icsContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//ESG Navigator//Roadmap Review//EN',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `DTSTAMP:${formatForICS(new Date())}`,
+    `DTSTART:${formatForICS(startDateTime)}`,
+    `DTEND:${formatForICS(endDateTime)}`,
+    'SUMMARY:Compliance Roadmap Review',
+    `DESCRIPTION:${descriptionLines.join('\\n')}`,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\n');
+
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'roadmap-review.ics';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 // Data Requirements Matrix
@@ -2179,6 +2306,8 @@ function displayDataMatrix() {
     const typeMatch = !typeFilter || item.dataType === typeFilter;
     return categoryMatch && typeMatch;
   });
+  currentDataMatrixView = filteredData;
+
 
   if (!filteredData.length) {
     matrixContainer.innerHTML = `
@@ -2237,7 +2366,46 @@ function getRequirementClass(requirement) {
 }
 
 function exportDataMatrix() {
-  alert('Data matrix export functionality would be implemented here');
+  if (!currentDataMatrixView || !currentDataMatrixView.length) {
+    alert('No data available to export. Adjust your filters and try again.');
+    return;
+  }
+
+  const header = ['Requirement', 'Description', 'Category', 'Data Type', 'CSRD', 'SFDR', 'SEC', 'TCFD/ISSB'];
+
+  const escapeCsvValue = value => {
+    if (value == null) return '';
+    const stringValue = String(value);
+    if (stringValue.includes('"') || stringValue.includes(',') || stringValue.includes('\n')) {
+      return '"' + stringValue.replace(/"/g, '""') + '"';
+    }
+    return stringValue;
+  };
+
+  const rows = currentDataMatrixView.map(item => [
+    item.requirement,
+    item.description,
+    dataMatrixCategoryLabels[item.category] || item.category,
+    dataMatrixTypeLabels[item.dataType] || item.dataType,
+    item.csrd,
+    item.sfdr,
+    item.sec,
+    item.tcfdIssb
+  ]);
+
+  const csvContent = [header, ...rows]
+    .map(row => row.map(escapeCsvValue).join(','))
+    .join('\n');
+
+  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'data-requirements-matrix.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 // Timeline & Deadlines
